@@ -36,6 +36,24 @@ function hasFinnhubApiKey(): boolean {
 	return Boolean(FINNHUB_API_KEY && FINNHUB_API_KEY.length > 0);
 }
 
+/**
+ * Create an empty market item (used for error/missing data states)
+ */
+function createEmptyMarketItem<T extends 'index' | 'commodity'>(
+	symbol: string,
+	name: string,
+	type: T
+): MarketItem {
+	return { symbol, name, price: NaN, change: NaN, changePercent: NaN, type };
+}
+
+/**
+ * Create an empty sector performance item
+ */
+function createEmptySectorItem(symbol: string, name: string): SectorPerformance {
+	return { symbol, name, price: NaN, change: NaN, changePercent: NaN };
+}
+
 // Map index symbols to ETF proxies (free tier doesn't support direct indices)
 const INDEX_ETF_MAP: Record<string, string> = {
 	'^DJI': 'DIA', // Dow Jones -> SPDR Dow Jones ETF
@@ -117,22 +135,17 @@ export async function fetchCryptoPrices(): Promise<CryptoItem[]> {
  * Fetch market indices from Finnhub
  */
 export async function fetchIndices(): Promise<MarketItem[]> {
+	const createEmptyIndices = () =>
+		INDICES.map((i) => createEmptyMarketItem(i.symbol, i.name, 'index'));
+
 	if (!hasFinnhubApiKey()) {
 		logger.warn('Markets API', 'Finnhub API key not configured. Add VITE_FINNHUB_API_KEY to .env');
-		return INDICES.map((index) => ({
-			symbol: index.symbol,
-			name: index.name,
-			price: NaN,
-			change: NaN,
-			changePercent: NaN,
-			type: 'index' as const
-		}));
+		return createEmptyIndices();
 	}
 
 	try {
 		logger.log('Markets API', 'Fetching indices from Finnhub');
 
-		// Fetch all indices in parallel (using ETF proxies)
 		const quotes = await Promise.all(
 			INDICES.map(async (index) => {
 				const etfSymbol = INDEX_ETF_MAP[index.symbol] || index.symbol;
@@ -151,14 +164,7 @@ export async function fetchIndices(): Promise<MarketItem[]> {
 		}));
 	} catch (error) {
 		logger.error('Markets API', 'Error fetching indices:', error);
-		return INDICES.map((index) => ({
-			symbol: index.symbol,
-			name: index.name,
-			price: NaN,
-			change: NaN,
-			changePercent: NaN,
-			type: 'index' as const
-		}));
+		return createEmptyIndices();
 	}
 }
 
@@ -166,21 +172,17 @@ export async function fetchIndices(): Promise<MarketItem[]> {
  * Fetch sector performance from Finnhub (using sector ETFs)
  */
 export async function fetchSectorPerformance(): Promise<SectorPerformance[]> {
+	const createEmptySectors = () =>
+		SECTORS.map((s) => createEmptySectorItem(s.symbol, s.name));
+
 	if (!hasFinnhubApiKey()) {
 		logger.warn('Markets API', 'Finnhub API key not configured');
-		return SECTORS.map((sector) => ({
-			symbol: sector.symbol,
-			name: sector.name,
-			price: NaN,
-			change: NaN,
-			changePercent: NaN
-		}));
+		return createEmptySectors();
 	}
 
 	try {
 		logger.log('Markets API', 'Fetching sector performance from Finnhub');
 
-		// Fetch all sector ETFs in parallel
 		const quotes = await Promise.all(
 			SECTORS.map(async (sector) => {
 				const quote = await fetchFinnhubQuote(sector.symbol);
@@ -197,13 +199,7 @@ export async function fetchSectorPerformance(): Promise<SectorPerformance[]> {
 		}));
 	} catch (error) {
 		logger.error('Markets API', 'Error fetching sectors:', error);
-		return SECTORS.map((sector) => ({
-			symbol: sector.symbol,
-			name: sector.name,
-			price: NaN,
-			change: NaN,
-			changePercent: NaN
-		}));
+		return createEmptySectors();
 	}
 }
 
@@ -221,22 +217,17 @@ const COMMODITY_SYMBOL_MAP: Record<string, string> = {
  * Fetch commodities from Finnhub
  */
 export async function fetchCommodities(): Promise<MarketItem[]> {
+	const createEmptyCommodities = () =>
+		COMMODITIES.map((c) => createEmptyMarketItem(c.symbol, c.name, 'commodity'));
+
 	if (!hasFinnhubApiKey()) {
 		logger.warn('Markets API', 'Finnhub API key not configured');
-		return COMMODITIES.map((commodity) => ({
-			symbol: commodity.symbol,
-			name: commodity.name,
-			price: NaN,
-			change: NaN,
-			changePercent: NaN,
-			type: 'commodity' as const
-		}));
+		return createEmptyCommodities();
 	}
 
 	try {
 		logger.log('Markets API', 'Fetching commodities from Finnhub');
 
-		// Fetch all commodities in parallel
 		const quotes = await Promise.all(
 			COMMODITIES.map(async (commodity) => {
 				const finnhubSymbol = COMMODITY_SYMBOL_MAP[commodity.symbol] || commodity.symbol;
@@ -255,21 +246,21 @@ export async function fetchCommodities(): Promise<MarketItem[]> {
 		}));
 	} catch (error) {
 		logger.error('Markets API', 'Error fetching commodities:', error);
-		return COMMODITIES.map((commodity) => ({
-			symbol: commodity.symbol,
-			name: commodity.name,
-			price: NaN,
-			change: NaN,
-			changePercent: NaN,
-			type: 'commodity' as const
-		}));
+		return createEmptyCommodities();
 	}
+}
+
+interface AllMarketsData {
+	crypto: CryptoItem[];
+	indices: MarketItem[];
+	sectors: SectorPerformance[];
+	commodities: MarketItem[];
 }
 
 /**
  * Fetch all market data
  */
-export async function fetchAllMarkets() {
+export async function fetchAllMarkets(): Promise<AllMarketsData> {
 	const [crypto, indices, sectors, commodities] = await Promise.all([
 		fetchCryptoPrices(),
 		fetchIndices(),

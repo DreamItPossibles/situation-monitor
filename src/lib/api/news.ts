@@ -147,25 +147,23 @@ export async function fetchCategoryNews(category: NewsCategory): Promise<NewsIte
 	}
 }
 
+/** All news categories in fetch order */
+const NEWS_CATEGORIES: NewsCategory[] = ['politics', 'tech', 'finance', 'gov', 'ai', 'intel'];
+
+/** Create an empty news result object */
+function createEmptyNewsResult(): Record<NewsCategory, NewsItem[]> {
+	return { politics: [], tech: [], finance: [], gov: [], ai: [], intel: [] };
+}
+
 /**
  * Fetch all news - sequential with delays to avoid rate limiting
  */
 export async function fetchAllNews(): Promise<Record<NewsCategory, NewsItem[]>> {
-	const categories: NewsCategory[] = ['politics', 'tech', 'finance', 'gov', 'ai', 'intel'];
-	const result: Record<NewsCategory, NewsItem[]> = {
-		politics: [],
-		tech: [],
-		finance: [],
-		gov: [],
-		ai: [],
-		intel: []
-	};
+	const result = createEmptyNewsResult();
 
-	// Fetch categories sequentially with delay between each
-	for (let i = 0; i < categories.length; i++) {
-		const category = categories[i];
+	for (let i = 0; i < NEWS_CATEGORIES.length; i++) {
+		const category = NEWS_CATEGORIES[i];
 
-		// Add delay between requests (not before the first one)
 		if (i > 0) {
 			await delay(API_DELAYS.betweenCategories);
 		}

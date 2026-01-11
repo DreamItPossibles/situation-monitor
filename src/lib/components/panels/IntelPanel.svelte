@@ -18,10 +18,8 @@
 		isPriority?: boolean;
 	}
 
-	// Subscribe to intel news store directly
-	const storeItems = $derived($intelNews.items);
-	const loading = $derived($intelNews.loading);
-	const error = $derived($intelNews.error);
+	// Destructure store state for cleaner access
+	const { items: storeItems, loading, error } = $derived($intelNews);
 
 	// Infer source type from source name
 	function inferSourceType(source: string): SourceType {
@@ -52,19 +50,16 @@
 	const items = $derived(storeItems.map(transformToIntelItem));
 	const count = $derived(items.length);
 
-	function getSourceBadgeVariant(
-		type: string
-	): 'default' | 'success' | 'warning' | 'danger' | 'info' {
-		switch (type) {
-			case 'osint':
-				return 'info';
-			case 'govt':
-				return 'warning';
-			case 'cyber':
-				return 'danger';
-			default:
-				return 'default';
-		}
+	type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+
+	const SOURCE_BADGE_VARIANTS: Record<string, BadgeVariant> = {
+		osint: 'info',
+		govt: 'warning',
+		cyber: 'danger'
+	};
+
+	function getSourceBadgeVariant(type: string): BadgeVariant {
+		return SOURCE_BADGE_VARIANTS[type] ?? 'default';
 	}
 </script>
 

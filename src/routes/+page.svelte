@@ -20,7 +20,7 @@
 		IntelPanel,
 		SituationPanel,
 		WorldLeadersPanel,
-	PrinterPanel
+		PrinterPanel
 	} from '$lib/components/panels';
 	import {
 		news,
@@ -46,6 +46,7 @@
 	} from '$lib/api';
 	import type { Prediction, WhaleTransaction, Contract, Layoff } from '$lib/api';
 	import type { CustomMonitor, WorldLeader } from '$lib/types';
+	import type { PanelId } from '$lib/config';
 
 	// Modal state
 	let settingsOpen = $state(false);
@@ -159,8 +160,9 @@
 	}
 
 	// Get panel visibility
-	const isPanelVisible = (id: string) =>
-		$settings.enabled[id as keyof typeof $settings.enabled] !== false;
+	function isPanelVisible(id: PanelId): boolean {
+		return $settings.enabled[id] !== false;
+	}
 
 	// Handle preset selection from onboarding
 	function handleSelectPreset(presetId: string) {
