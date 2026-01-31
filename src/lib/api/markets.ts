@@ -136,7 +136,7 @@ export async function fetchIndices(): Promise<MarketItem[]> {
 	const createEmptyIndices = () =>
 		INDICES.map((i) => createEmptyMarketItem(i.symbol, i.name, 'index'));
 
-	if (!hasFinnhubApiKey()) {
+	if (!hasFinnhubApiKey() && !import.meta.env.PROD) {
 		logger.warn('Markets API', 'Finnhub API key not configured. Add VITE_FINNHUB_API_KEY to .env');
 		return createEmptyIndices();
 	}
@@ -172,7 +172,7 @@ export async function fetchIndices(): Promise<MarketItem[]> {
 export async function fetchSectorPerformance(): Promise<SectorPerformance[]> {
 	const createEmptySectors = () => SECTORS.map((s) => createEmptySectorItem(s.symbol, s.name));
 
-	if (!hasFinnhubApiKey()) {
+	if (!hasFinnhubApiKey() && !import.meta.env.PROD) {
 		logger.warn('Markets API', 'Finnhub API key not configured');
 		return createEmptySectors();
 	}
@@ -217,7 +217,7 @@ export async function fetchCommodities(): Promise<MarketItem[]> {
 	const createEmptyCommodities = () =>
 		COMMODITIES.map((c) => createEmptyMarketItem(c.symbol, c.name, 'commodity'));
 
-	if (!hasFinnhubApiKey()) {
+	if (!hasFinnhubApiKey() && !import.meta.env.PROD) {
 		logger.warn('Markets API', 'Finnhub API key not configured');
 		return createEmptyCommodities();
 	}

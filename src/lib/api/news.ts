@@ -109,7 +109,7 @@ export async function fetchCategoryNews(
 	try {
 		const baseQuery = categoryQueries[category];
 		const langFilter = lang === 'en' ? 'sourcelang:english' : 'sourcelang:chinese';
-		const fullQuery = `${baseQuery} ${langFilter}`;
+		const fullQuery = encodeURIComponent(`${baseQuery} ${langFilter}`);
 		const maxRecords = lang === 'en' ? 15 : 10;
 
 		// Build the raw GDELT URL with timespan=7d to get recent articles
