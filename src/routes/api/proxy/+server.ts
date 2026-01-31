@@ -16,9 +16,11 @@ export const GET: RequestHandler = async ({ url }) => {
 		return json({ error: 'Missing url parameter' }, { status: 400 });
 	}
 
-	// For Chinese sources or GDELT, try direct fetch first (server-side)
+	// For Chinese sources, GDELT, or Finance APIs, try direct fetch first (server-side)
 	if (
 		targetUrl.includes('gdelt') ||
+		targetUrl.includes('finnhub.io') ||
+		targetUrl.includes('coingecko.com') ||
 		targetUrl.includes('sourcelang:chinese') ||
 		targetUrl.includes('.cn')
 	) {
@@ -34,7 +36,7 @@ export const GET: RequestHandler = async ({ url }) => {
 				const data = await res.text();
 				return new Response(data, {
 					headers: {
-						'Content-Type': res.headers.get('Content-Type') || 'text/plain',
+						'Content-Type': res.headers.get('Content-Type') || 'application/json',
 						'Access-Control-Allow-Origin': '*'
 					}
 				});
