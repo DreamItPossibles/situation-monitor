@@ -18,6 +18,7 @@
 		ContractsPanel,
 		LayoffsPanel,
 		IntelPanel,
+		SituationPanel,
 		WorldLeadersPanel,
 		PrinterPanel,
 		FedPanel
@@ -337,7 +338,71 @@
 			{/if}
 
 			<!-- Situation Panels -->
-			<!-- Removed redundant situation panels to restore original look -->
+			{#if isPanelVisible('venezuela')}
+				<div class="panel-slot">
+					<SituationPanel
+						panelId="venezuela"
+						config={{
+							title: $t('situation_data.venezuela.title'),
+							subtitle: $t('situation_data.venezuela.subtitle'),
+							criticalKeywords: ['maduro', 'caracas', 'venezuela', 'guaido']
+						}}
+						news={$allNewsItems.filter(
+							(n) =>
+								n.title.toLowerCase().includes('venezuela') ||
+								n.title.toLowerCase().includes('maduro')
+						)}
+					/>
+				</div>
+			{/if}
+
+			{#if isPanelVisible('greenland')}
+				<div class="panel-slot">
+					<SituationPanel
+						panelId="greenland"
+						config={{
+							title: $t('situation_data.greenland.title'),
+							subtitle: $t('situation_data.greenland.subtitle'),
+							criticalKeywords: ['greenland', 'arctic', 'nuuk', 'denmark']
+						}}
+						news={$allNewsItems.filter(
+							(n) =>
+								n.title.toLowerCase().includes('greenland') ||
+								n.title.toLowerCase().includes('arctic')
+						)}
+					/>
+				</div>
+			{/if}
+
+			{#if isPanelVisible('iran')}
+				<div class="panel-slot">
+					<SituationPanel
+						panelId="iran"
+						config={{
+							title: $t('situation_data.iran.title'),
+							subtitle: $t('situation_data.iran.subtitle'),
+							criticalKeywords: [
+								'protest',
+								'uprising',
+								'revolution',
+								'crackdown',
+								'killed',
+								'nuclear',
+								'strike',
+								'attack',
+								'irgc',
+								'khamenei'
+							]
+						}}
+						news={$allNewsItems.filter(
+							(n) =>
+								n.title.toLowerCase().includes('iran') ||
+								n.title.toLowerCase().includes('tehran') ||
+								n.title.toLowerCase().includes('irgc')
+						)}
+					/>
+				</div>
+			{/if}
 
 			<!-- Placeholder panels for additional data sources -->
 			{#if isPanelVisible('whales')}

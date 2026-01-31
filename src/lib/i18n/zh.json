@@ -137,14 +137,17 @@
 		"contracts": "政府合同",
 		"ai": "人工智能竞赛",
 		"layoffs": "裁员追踪",
-		"venezuela": "委内瑞拉局势",
-		"greenland": "格陵兰局势",
-		"iran": "伊朗局势",
+		"venezuela": "委内瑞拉局势监控",
+		"greenland": "格陵兰局势监控",
+		"iran": "伊朗局势监控",
 		"leaders": "世界领袖",
 		"intel": "情报反馈",
 		"correlation": "关联引擎",
 		"narrative": "叙事追踪",
 		"fed": "美联储",
+		"chinese-api": "中文渠道 API"
+	},
+	"situation_data": {
 		"venezuela": {
 			"title": "委内瑞拉观察",
 			"subtitle": "人道主义危机监控"

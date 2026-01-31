@@ -137,14 +137,17 @@
 		"contracts": "Gov Contracts",
 		"ai": "AI Arms Race",
 		"layoffs": "Layoffs Tracker",
-		"venezuela": "Venezuela Situation",
-		"greenland": "Greenland Situation",
-		"iran": "Iran Situation",
+		"venezuela": "Venezuela Situation Monitor",
+		"greenland": "Greenland Situation Monitor",
+		"iran": "Iran Situation Monitor",
 		"leaders": "World Leaders",
 		"intel": "Intel Feed",
 		"correlation": "Correlation Engine",
 		"narrative": "Narrative Tracker",
 		"fed": "Federal Reserve",
+		"chinese-api": "Chinese News API"
+	},
+	"situation_data": {
 		"venezuela": {
 			"title": "Venezuela Watch",
 			"subtitle": "Humanitarian crisis monitoring"
