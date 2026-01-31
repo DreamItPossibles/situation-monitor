@@ -22,10 +22,12 @@
 		return 'down-3';
 	}
 
-	const changeText = $derived(formatPercentChange(sector.changePercent));
+	const changeText = $derived(
+		isNaN(sector.changePercent) ? '--' : formatPercentChange(sector.changePercent)
+	);
 </script>
 
-<div class="heatmap-cell {colorClass}">
+<div class="heatmap-cell {colorClass}" title={isNaN(sector.changePercent) ? 'No Data - Check API Key' : ''}>
 	<div class="sector-name">{sector.name}</div>
 	{#if showSymbol}
 		<div class="sector-symbol">{sector.symbol}</div>
