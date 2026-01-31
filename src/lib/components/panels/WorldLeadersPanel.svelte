@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Panel } from '$lib/components/common';
 	import type { WorldLeader } from '$lib/types';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		leaders?: WorldLeader[];
@@ -19,9 +20,11 @@
 	}
 </script>
 
-<Panel id="leaders" title="World Leaders" {count} {loading} {error}>
+<Panel id="leaders" {count} {loading} {error}>
 	{#if leaders.length === 0 && !loading && !error}
-		<div class="empty-state">No leaders data available</div>
+		<div class="empty-state">
+			{$t('common.empty_state', { values: { type: $t('panels.leaders') } })}
+		</div>
 	{:else}
 		<div class="leaders-grid">
 			{#each leaders as leader (leader.id)}
@@ -41,7 +44,9 @@
 						{/if}
 					</div>
 					<div class="leader-meta">
-						<span class="leader-since">Since {leader.since}</span>
+						<span class="leader-since"
+							>{$t('common.since', { values: { date: leader.since } })}</span
+						>
 						<span class="leader-party">{leader.party}</span>
 					</div>
 					{#if leader.focus && leader.focus.length > 0}

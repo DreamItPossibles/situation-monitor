@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { isRefreshing, lastRefresh } from '$lib/stores';
+	import { t, locale } from 'svelte-i18n';
 
 	interface Props {
 		onSettingsClick?: () => void;
@@ -9,20 +10,27 @@
 
 	const lastRefreshText = $derived(
 		$lastRefresh
-			? `Last updated: ${new Date($lastRefresh).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
-			: 'Never refreshed'
+			? $t('header.last_updated', {
+					values: {
+						time: new Date($lastRefresh).toLocaleTimeString($locale ?? [], {
+							hour: 'numeric',
+							minute: '2-digit'
+						})
+					}
+				})
+			: $t('header.never_refreshed')
 	);
 </script>
 
 <header class="header">
 	<div class="header-left">
-		<h1 class="logo">SITUATION MONITOR</h1>
+		<h1 class="logo">{$t('common.logo')}</h1>
 	</div>
 
 	<div class="header-center">
 		<div class="refresh-status">
 			{#if $isRefreshing}
-				<span class="status-text loading">Refreshing...</span>
+				<span class="status-text loading">{$t('header.refreshing')}</span>
 			{:else}
 				<span class="status-text">{lastRefreshText}</span>
 			{/if}
@@ -30,9 +38,9 @@
 	</div>
 
 	<div class="header-right">
-		<button class="header-btn settings-btn" onclick={onSettingsClick} title="Settings">
+		<button class="header-btn settings-btn" onclick={onSettingsClick} title={$t('common.settings')}>
 			<span class="btn-icon">⚙</span>
-			<span class="btn-label">Settings</span>
+			<span class="btn-label">{$t('common.settings')}</span>
 		</button>
 	</div>
 </header>

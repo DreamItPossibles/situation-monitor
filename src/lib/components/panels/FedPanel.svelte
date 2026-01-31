@@ -4,6 +4,7 @@
 	import { fedNews, fedIndicators, fedVideos } from '$lib/stores';
 	import { isFredConfigured } from '$lib/api/fred';
 	import type { EconomicIndicator } from '$lib/api/fred';
+	import { t, locale } from 'svelte-i18n';
 
 	// Store state
 	const newsState = $derived($fedNews);
@@ -57,7 +58,7 @@
 	}
 </script>
 
-<Panel id="fed" title="Federal Reserve" count={newsState.items.length} {loading} {error}>
+<Panel id="fed" count={newsState.items.length} {loading} {error}>
 	<!-- Economic Indicators -->
 	{#if hasApiKey && indicatorList.length > 0}
 		<div class="indicators-section">
@@ -75,7 +76,7 @@
 		</div>
 	{:else if !hasApiKey && !loading}
 		<div class="no-api-key">
-			<span class="no-api-key-text">Add VITE_FRED_API_KEY for economic indicators</span>
+			<span class="no-api-key-text">{$t('fed.api_key_required')}</span>
 		</div>
 	{/if}
 
@@ -83,14 +84,14 @@
 	{#if videoItems.length > 0}
 		<div class="video-section">
 			<div class="section-header">
-				<span class="section-title">Speeches & Video</span>
+				<span class="section-title">{$t('fed.speeches_video')}</span>
 				<a
 					href="https://www.federalreserve.gov/live-broadcast.htm"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="live-link"
 				>
-					Live Broadcast
+					{$t('fed.live_broadcast')}
 				</a>
 			</div>
 			<div class="video-list">
@@ -103,7 +104,7 @@
 								{#if item.isPowellRelated}
 									<Badge text="POWELL" variant="warning" />
 								{/if}
-								<span>{getRelativeTime(item.pubDate)}</span>
+								<span>{getRelativeTime(item.pubDate, $locale ?? 'en-US')}</span>
 							</div>
 						</div>
 					</a>
@@ -115,7 +116,7 @@
 	<!-- News Feed -->
 	<div class="news-section">
 		{#if newsState.items.length === 0 && !loading && !error}
-			<div class="empty-state">No Fed news available</div>
+			<div class="empty-state">{$t('fed.no_news')}</div>
 		{:else}
 			<div class="fed-news-list">
 				{#each newsState.items as item (item.id)}
@@ -131,7 +132,9 @@
 								{/if}
 							</div>
 							{#if item.pubDate}
-								<span class="fed-news-time">{getRelativeTime(item.pubDate)}</span>
+								<span class="fed-news-time"
+									>{getRelativeTime(item.pubDate, $locale ?? 'en-US')}</span
+								>
 							{/if}
 						</div>
 						<a href={item.link} target="_blank" rel="noopener noreferrer" class="fed-news-title">

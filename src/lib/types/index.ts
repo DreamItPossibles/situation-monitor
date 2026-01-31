@@ -3,7 +3,7 @@
 /**
  * News feed category
  */
-export type NewsCategory = 'politics' | 'tech' | 'finance' | 'gov' | 'ai' | 'intel';
+export type NewsCategory = 'politics' | 'tech' | 'finance' | 'gov' | 'ai' | 'intel' | 'cn_news';
 
 /**
  * A news item from any source (RSS, GDELT, etc.)
@@ -22,6 +22,7 @@ export interface NewsItem {
 	alertKeyword?: string;
 	region?: string;
 	topics?: string[];
+	lang?: 'en' | 'zh';
 }
 
 /**

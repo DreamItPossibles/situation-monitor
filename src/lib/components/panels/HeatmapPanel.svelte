@@ -1,15 +1,18 @@
 <script lang="ts">
 	import { Panel, HeatmapCell } from '$lib/components/common';
 	import { sectors } from '$lib/stores';
+	import { t } from 'svelte-i18n';
 
 	const items = $derived($sectors.items);
 	const loading = $derived($sectors.loading);
 	const error = $derived($sectors.error);
 </script>
 
-<Panel id="heatmap" title="Sector Heatmap" {loading} {error}>
+<Panel id="heatmap" {loading} {error}>
 	{#if items.length === 0 && !loading && !error}
-		<div class="empty-state">No sector data available</div>
+		<div class="empty-state">
+			{$t('common.empty_state', { values: { type: $t('panels.heatmap') } })}
+		</div>
 	{:else}
 		<div class="heatmap-grid">
 			{#each items as sector (sector.symbol)}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Panel } from '$lib/components/common';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		data?: {
@@ -15,23 +16,23 @@
 	let { data = null, loading = false, error = null }: Props = $props();
 
 	const isExpanding = $derived(data && data.change > 0);
-	const status = $derived(isExpanding ? 'PRINTER ON' : 'PRINTER OFF');
+	const status = $derived(isExpanding ? $t('printer.on') : $t('printer.off'));
 	const statusClass = $derived(isExpanding ? 'critical' : 'monitoring');
 </script>
 
-<Panel id="printer" title="Money Printer" {status} {statusClass} {loading} {error}>
+<Panel id="printer" {status} {statusClass} {loading} {error}>
 	{#if !data && !loading && !error}
-		<div class="empty-state">No Fed data available</div>
+		<div class="empty-state">{$t('common.empty_state', { values: { type: 'Fed' } })}</div>
 	{:else if data}
 		<div class="printer-gauge">
-			<div class="printer-label">Federal Reserve Balance Sheet</div>
+			<div class="printer-label">{$t('printer.label')}</div>
 			<div class="printer-value">
 				{data.value.toFixed(2)}<span class="printer-unit">T USD</span>
 			</div>
 			<div class="printer-change" class:up={isExpanding} class:down={!isExpanding}>
 				{data.change >= 0 ? '+' : ''}{(data.change * 1000).toFixed(0)}B ({data.changePercent >= 0
 					? '+'
-					: ''}{data.changePercent.toFixed(2)}%) WoW
+					: ''}{data.changePercent.toFixed(2)}%) {$t('printer.wow')}
 			</div>
 			<div class="printer-bar">
 				<div class="printer-fill" style="width: {Math.min(data.percentOfMax, 100)}%"></div>

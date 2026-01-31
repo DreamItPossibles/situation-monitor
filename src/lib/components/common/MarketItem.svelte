@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { MarketItem as MarketItemType } from '$lib/types';
 	import { formatPercentChange, getChangeClass } from '$lib/utils';
+	import { locale } from 'svelte-i18n';
 
 	interface Props {
 		item: MarketItemType;
@@ -24,7 +25,7 @@
 		!isDataAvailable
 			? '—'
 			: item.price > 100
-				? item.price.toLocaleString('en-US', { maximumFractionDigits: 0 })
+				? item.price.toLocaleString($locale ?? 'en-US', { maximumFractionDigits: 0 })
 				: item.price.toFixed(2)
 	);
 	const changeText = $derived(isDataAvailable ? formatPercentChange(item.changePercent) : '—');

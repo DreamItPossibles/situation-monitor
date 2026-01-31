@@ -2,12 +2,21 @@
 	import { Panel, NewsItem } from '$lib/components/common';
 	import type { NewsCategory } from '$lib/types';
 	import type { PanelId } from '$lib/config';
-	import { politicsNews, techNews, financeNews, govNews, aiNews, intelNews } from '$lib/stores';
+	import {
+		politicsNews,
+		techNews,
+		financeNews,
+		govNews,
+		aiNews,
+		intelNews,
+		cnNews
+	} from '$lib/stores';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		category: NewsCategory;
 		panelId: PanelId;
-		title: string;
+		title?: string;
 	}
 
 	let { category, panelId, title }: Props = $props();
@@ -19,7 +28,8 @@
 		finance: financeNews,
 		gov: govNews,
 		ai: aiNews,
-		intel: intelNews
+		intel: intelNews,
+		cn_news: cnNews
 	};
 
 	const categoryStore = $derived(categoryStores[category]);
@@ -31,7 +41,7 @@
 
 <Panel id={panelId} {title} {count} {loading} {error}>
 	{#if items.length === 0 && !loading && !error}
-		<div class="empty-state">No news available</div>
+		<div class="empty-state">{$t('common.no_news')}</div>
 	{:else}
 		<div class="news-list">
 			{#each items.slice(0, 15) as item (item.id)}

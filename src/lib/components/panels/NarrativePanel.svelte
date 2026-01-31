@@ -2,6 +2,7 @@
 	import { Panel, Badge } from '$lib/components/common';
 	import { analyzeNarratives } from '$lib/analysis/narrative';
 	import type { NewsItem } from '$lib/types';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		news?: NewsItem[];
@@ -42,14 +43,14 @@
 	}
 </script>
 
-<Panel id="narrative" title="Narrative Tracker" {loading} {error}>
+<Panel id="narrative" {loading} {error}>
 	{#if news.length === 0 && !loading && !error}
-		<div class="empty-state">Insufficient data for narrative analysis</div>
+		<div class="empty-state">{$t('narratives.no_data')}</div>
 	{:else if analysis}
 		<div class="narrative-content">
 			{#if analysis.emergingFringe.length > 0}
 				<div class="section">
-					<div class="section-title">Emerging Fringe</div>
+					<div class="section-title">{$t('narratives.emerging')}</div>
 					{#each analysis.emergingFringe.slice(0, 4) as narrative}
 						<div class="narrative-item">
 							<div class="narrative-header">
@@ -60,7 +61,9 @@
 								/>
 							</div>
 							<div class="narrative-meta">
-								<span class="mention-count">{narrative.count} mentions</span>
+								<span class="mention-count">
+									{$t('common.mentions', { values: { count: narrative.count } })}
+								</span>
 							</div>
 							{#if narrative.sources.length > 0}
 								<div class="narrative-sources">
@@ -74,17 +77,25 @@
 
 			{#if analysis.fringeToMainstream.length > 0}
 				<div class="section">
-					<div class="section-title">Fringe → Mainstream Crossovers</div>
+					<div class="section-title">{$t('narratives.crossover')}</div>
 					{#each analysis.fringeToMainstream.slice(0, 3) as crossover}
 						<div class="crossover-item">
 							<div class="crossover-narrative">{crossover.name}</div>
 							<div class="crossover-path">
-								<span class="from">Fringe ({crossover.fringeCount})</span>
+								<span class="from"
+									>{$t('narratives.fringe', { values: { count: crossover.fringeCount } })}</span
+								>
 								<span class="arrow">→</span>
-								<span class="to">Mainstream ({crossover.mainstreamCount})</span>
+								<span class="to"
+									>{$t('narratives.mainstream', {
+										values: { count: crossover.mainstreamCount }
+									})}</span
+								>
 							</div>
 							<div class="crossover-level">
-								Crossover level: {Math.round(crossover.crossoverLevel * 100)}%
+								{$t('narratives.crossover_level', {
+									values: { level: Math.round(crossover.crossoverLevel * 100) }
+								})}
 							</div>
 						</div>
 					{/each}
@@ -93,7 +104,7 @@
 
 			{#if analysis.narrativeWatch.length > 0}
 				<div class="section">
-					<div class="section-title">Narrative Watch</div>
+					<div class="section-title">{$t('narratives.watch')}</div>
 					<div class="themes-grid">
 						{#each analysis.narrativeWatch.slice(0, 6) as narrative}
 							<div class="theme-tag">
@@ -107,7 +118,7 @@
 
 			{#if analysis.disinfoSignals.length > 0}
 				<div class="section">
-					<div class="section-title">Disinfo Signals</div>
+					<div class="section-title">{$t('narratives.disinfo')}</div>
 					{#each analysis.disinfoSignals.slice(0, 3) as signal}
 						<div class="disinfo-item">
 							<div class="disinfo-header">
@@ -117,18 +128,20 @@
 									variant={getSeverityVariant(signal.severity)}
 								/>
 							</div>
-							<div class="disinfo-meta">{signal.count} mentions</div>
+							<div class="disinfo-meta">
+								{$t('common.mentions', { values: { count: signal.count } })}
+							</div>
 						</div>
 					{/each}
 				</div>
 			{/if}
 
 			{#if analysis.emergingFringe.length === 0 && analysis.fringeToMainstream.length === 0}
-				<div class="empty-state">No significant narratives detected</div>
+				<div class="empty-state">{$t('narratives.none_detected')}</div>
 			{/if}
 		</div>
 	{:else}
-		<div class="empty-state">No significant narratives detected</div>
+		<div class="empty-state">{$t('narratives.none_detected')}</div>
 	{/if}
 </Panel>
 

@@ -2,6 +2,7 @@
 	import Modal from './Modal.svelte';
 	import { monitors } from '$lib/stores';
 	import type { CustomMonitor } from '$lib/types';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		open: boolean;
@@ -42,12 +43,12 @@
 			.filter((k) => k.length > 0);
 
 		if (!trimmedName) {
-			error = 'Name is required';
+			error = $t('monitors.error_name');
 			return;
 		}
 
 		if (keywordList.length === 0) {
-			error = 'At least one keyword is required';
+			error = $t('monitors.error_keywords');
 			return;
 		}
 
@@ -67,7 +68,7 @@
 			});
 
 			if (!result) {
-				error = 'Maximum number of monitors reached (20)';
+				error = $t('monitors.error_max');
 				return;
 			}
 		}
@@ -83,14 +84,14 @@
 	}
 </script>
 
-<Modal {open} title={editMonitor ? 'Edit Monitor' : 'Create Monitor'} {onClose}>
+<Modal {open} title={editMonitor ? $t('monitors.edit') : $t('monitors.create')} {onClose}>
 	<form class="monitor-form" onsubmit={handleSubmit}>
 		{#if error}
 			<div class="form-error">{error}</div>
 		{/if}
 
 		<div class="form-group">
-			<label for="monitor-name">Name</label>
+			<label for="monitor-name">{$t('monitors.name')}</label>
 			<input
 				id="monitor-name"
 				type="text"
@@ -101,30 +102,34 @@
 		</div>
 
 		<div class="form-group">
-			<label for="monitor-keywords">Keywords (comma separated)</label>
+			<label for="monitor-keywords">{$t('monitors.keywords')}</label>
 			<input
 				id="monitor-keywords"
 				type="text"
 				bind:value={keywords}
 				placeholder="e.g., ukraine, zelensky, kyiv"
 			/>
-			<p class="form-hint">News matching any of these keywords will appear in your monitor</p>
+			<p class="form-hint">{$t('monitors.keywords_hint')}</p>
 		</div>
 
 		<div class="form-group">
 			<label class="checkbox-label">
 				<input type="checkbox" bind:checked={enabled} />
-				<span>Enabled</span>
+				<span>{$t('monitors.enabled')}</span>
 			</label>
 		</div>
 
 		<div class="form-actions">
 			{#if editMonitor}
-				<button type="button" class="delete-btn" onclick={handleDelete}> Delete </button>
+				<button type="button" class="delete-btn" onclick={handleDelete}>
+					{$t('monitors.delete')}
+				</button>
 			{/if}
-			<button type="button" class="cancel-btn" onclick={onClose}> Cancel </button>
+			<button type="button" class="cancel-btn" onclick={onClose}>
+				{$t('common.cancel')}
+			</button>
 			<button type="submit" class="submit-btn">
-				{editMonitor ? 'Save Changes' : 'Create Monitor'}
+				{editMonitor ? $t('monitors.save') : $t('monitors.create')}
 			</button>
 		</div>
 	</form>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PRESETS, PRESET_ORDER } from '$lib/config';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		open: boolean;
@@ -31,11 +32,11 @@
 	<div class="modal-overlay">
 		<div class="modal onboarding-modal">
 			<div class="modal-header">
-				<button class="close-btn" onclick={handleClose} aria-label="Skip onboarding">
+				<button class="close-btn" onclick={handleClose} aria-label={$t('onboarding.skip')}>
 					&times;
 				</button>
-				<h2>Welcome to Situation Monitor</h2>
-				<p class="subtitle">Choose a dashboard configuration to get started</p>
+				<h2>{$t('onboarding.title')}</h2>
+				<p class="subtitle">{$t('onboarding.subtitle')}</p>
 			</div>
 
 			<div class="preset-grid">
@@ -43,15 +44,17 @@
 					{@const preset = PRESETS[presetId]}
 					<button class="preset-card" onclick={() => handleSelectPreset(presetId)}>
 						<div class="preset-icon">{preset.icon}</div>
-						<div class="preset-name">{preset.name}</div>
-						<div class="preset-description">{preset.description}</div>
-						<div class="preset-panel-count">{preset.panels.length} panels</div>
+						<div class="preset-name">{$t(`presets.${presetId}.name`)}</div>
+						<div class="preset-description">{$t(`presets.${presetId}.description`)}</div>
+						<div class="preset-panel-count">
+							{$t('onboarding.panels_count', { values: { count: preset.panels.length } })}
+						</div>
 					</button>
 				{/each}
 			</div>
 
 			<div class="modal-footer">
-				<p class="hint">You can change this later in Settings</p>
+				<p class="hint">{$t('onboarding.hint')}</p>
 			</div>
 		</div>
 	</div>

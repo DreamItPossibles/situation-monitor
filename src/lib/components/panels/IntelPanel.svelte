@@ -3,6 +3,7 @@
 	import { getRelativeTime } from '$lib/utils';
 	import { intelNews } from '$lib/stores';
 	import type { NewsItem } from '$lib/types';
+	import { t, locale } from 'svelte-i18n';
 
 	type SourceType = 'osint' | 'govt' | 'think-tank' | 'defense' | 'regional' | 'cyber';
 
@@ -28,7 +29,8 @@
 		if (s.includes('bellingcat')) return 'osint';
 		if (s.includes('defense') || s.includes('war') || s.includes('military')) return 'defense';
 		if (s.includes('diplomat') || s.includes('monitor')) return 'regional';
-		if (s.includes('white house') || s.includes('fed') || s.includes('sec') || s.includes('dod')) return 'govt';
+		if (s.includes('white house') || s.includes('fed') || s.includes('sec') || s.includes('dod'))
+			return 'govt';
 		return 'think-tank';
 	}
 
@@ -63,9 +65,9 @@
 	}
 </script>
 
-<Panel id="intel" title="Intel Feed" {count} {loading} {error}>
+<Panel id="intel" {count} {loading} {error}>
 	{#if items.length === 0 && !loading && !error}
-		<div class="empty-state">No intel available</div>
+		<div class="empty-state">{$t('common.no_intel')}</div>
 	{:else}
 		<div class="intel-list">
 			{#each items as item (item.id)}
@@ -90,7 +92,7 @@
 					</a>
 					{#if item.pubDate}
 						<div class="intel-meta">
-							<span>{getRelativeTime(item.pubDate)}</span>
+							<span>{getRelativeTime(item.pubDate, $locale ?? 'en-US')}</span>
 						</div>
 					{/if}
 				</div>

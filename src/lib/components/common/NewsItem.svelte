@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { NewsItem } from '$lib/types';
 	import { timeAgo } from '$lib/utils';
+	import { locale } from 'svelte-i18n';
 
 	interface Props {
 		item: NewsItem;
@@ -23,6 +24,9 @@
 	{#if showSource}
 		<div class="item-source">
 			{item.source}
+			{#if item.lang === 'zh'}
+				<span class="lang-tag">ZH</span>
+			{/if}
 			{#if showAlert && item.isAlert}
 				<span class="alert-tag">ALERT</span>
 			{/if}
@@ -38,7 +42,7 @@
 	{/if}
 
 	<div class="item-meta">
-		<span class="item-time">{timeAgo(item.timestamp)}</span>
+		<span class="item-time">{timeAgo(item.timestamp, $locale ?? 'en-US')}</span>
 		{#if item.region}
 			<span class="item-region">{item.region}</span>
 		{/if}
@@ -86,6 +90,16 @@
 		padding: 0.1rem 0.3rem;
 		border-radius: 2px;
 		font-weight: 600;
+	}
+
+	.lang-tag {
+		color: var(--accent);
+		border: 1px solid var(--accent);
+		font-size: 0.45rem;
+		padding: 0 0.2rem;
+		border-radius: 2px;
+		font-weight: 600;
+		opacity: 0.8;
 	}
 
 	.item-title {

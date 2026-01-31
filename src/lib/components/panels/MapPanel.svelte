@@ -96,7 +96,7 @@
 		if (cached) return cached;
 
 		try {
-			const res = await fetch(
+			const res = await fetchWithProxy(
 				`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m`
 			);
 			const data = await res.json();
@@ -256,7 +256,7 @@
 
 		// Load world data
 		try {
-			const response = await fetch(
+			const response = await fetchWithProxy(
 				'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 			);
 			const world = await response.json();
@@ -573,9 +573,11 @@
 	onMount(() => {
 		initMap();
 	});
+	import { t } from 'svelte-i18n';
+	import { fetchWithProxy } from '$lib/config/api';
 </script>
 
-<Panel id="map" title="Global Situation" {loading} {error}>
+<Panel id="map" {loading} {error}>
 	<div class="map-container" bind:this={mapContainer}>
 		<svg class="map-svg"></svg>
 		{#if tooltipVisible && tooltipContent}
@@ -590,19 +592,22 @@
 			</div>
 		{/if}
 		<div class="zoom-controls">
-			<button class="zoom-btn" onclick={zoomIn} title="Zoom in">+</button>
-			<button class="zoom-btn" onclick={zoomOut} title="Zoom out">−</button>
-			<button class="zoom-btn" onclick={resetZoom} title="Reset">⟲</button>
+			<button class="zoom-btn" onclick={zoomIn} title={$t('map.zoom_in')}>+</button>
+			<button class="zoom-btn" onclick={zoomOut} title={$t('map.zoom_out')}>−</button>
+			<button class="zoom-btn" onclick={resetZoom} title={$t('map.reset')}>⟲</button>
 		</div>
 		<div class="map-legend">
 			<div class="legend-item">
-				<span class="legend-dot high"></span> High
+				<span class="legend-dot high"></span>
+				{$t('map.high')}
 			</div>
 			<div class="legend-item">
-				<span class="legend-dot elevated"></span> Elevated
+				<span class="legend-dot elevated"></span>
+				{$t('map.elevated')}
 			</div>
 			<div class="legend-item">
-				<span class="legend-dot low"></span> Low
+				<span class="legend-dot low"></span>
+				{$t('map.low')}
 			</div>
 		</div>
 	</div>

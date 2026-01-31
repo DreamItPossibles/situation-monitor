@@ -89,8 +89,12 @@ const SERVICE_CONFIG: Record<ServiceId, ServiceConfig> = {
 		id: 'cors_proxy',
 		baseUrl: null, // Uses proxy URLs from list
 		proxies: [
-			'https://situation-monitor-proxy.seanthielen-e.workers.dev/?url=',
-			'https://api.allorigins.win/raw?url='
+			'https://corsproxy.io/?url=',
+			'https://api.allorigins.win/raw?url=',
+			'https://proxy.cors.sh/',
+			'https://thingproxy.freeboard.io/fetch/',
+			'https://cors-anywhere.herokuapp.com/',
+			'https://situation-monitor-proxy.seanthielen-e.workers.dev/?url='
 		],
 		timeout: 12000,
 		retries: 1, // Already has proxy fallback

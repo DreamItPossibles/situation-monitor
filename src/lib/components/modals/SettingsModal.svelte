@@ -2,6 +2,7 @@
 	import Modal from './Modal.svelte';
 	import { settings } from '$lib/stores';
 	import { PANELS, type PanelId } from '$lib/config';
+	import { t, locale } from 'svelte-i18n';
 
 	interface Props {
 		open: boolean;
@@ -18,13 +19,26 @@
 	function handleResetPanels() {
 		settings.reset();
 	}
+
+	function handleLocaleChange(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		settings.setLocale(target.value);
+	}
 </script>
 
-<Modal {open} title="Settings" {onClose}>
+<Modal {open} title={$t('settings.title')} {onClose}>
 	<div class="settings-sections">
 		<section class="settings-section">
-			<h3 class="section-title">Enabled Panels</h3>
-			<p class="section-desc">Toggle panels on/off to customize your dashboard</p>
+			<h3 class="section-title">{$t('settings.language')}</h3>
+			<select class="locale-select" value={$locale} onchange={handleLocaleChange}>
+				<option value="en">English</option>
+				<option value="zh">简体中文</option>
+			</select>
+		</section>
+
+		<section class="settings-section">
+			<h3 class="section-title">{$t('settings.enabled_panels')}</h3>
+			<p class="section-desc">{$t('settings.enabled_panels_desc')}</p>
 
 			<div class="panels-grid">
 				{#each Object.entries(PANELS) as [id, config]}
@@ -36,7 +50,7 @@
 							checked={isEnabled}
 							onchange={() => handleTogglePanel(panelId)}
 						/>
-						<span class="panel-name">{config.name}</span>
+						<span class="panel-name">{$t(`panels.${panelId}`)}</span>
 						<span class="panel-priority">P{config.priority}</span>
 					</label>
 				{/each}
@@ -44,12 +58,14 @@
 		</section>
 
 		<section class="settings-section">
-			<h3 class="section-title">Dashboard</h3>
+			<h3 class="section-title">{$t('settings.dashboard')}</h3>
 			{#if onReconfigure}
-				<button class="reconfigure-btn" onclick={onReconfigure}> Reconfigure Dashboard </button>
-				<p class="btn-hint">Choose a preset profile for your panels</p>
+				<button class="reconfigure-btn" onclick={onReconfigure}>
+					{$t('settings.reconfigure')}
+				</button>
+				<p class="btn-hint">{$t('settings.reconfigure_hint')}</p>
 			{/if}
-			<button class="reset-btn" onclick={handleResetPanels}> Reset All Settings </button>
+			<button class="reset-btn" onclick={handleResetPanels}> {$t('settings.reset_all')} </button>
 		</section>
 	</div>
 </Modal>
@@ -80,6 +96,22 @@
 		font-size: 0.65rem;
 		color: var(--text-muted);
 		margin: 0;
+	}
+
+	.locale-select {
+		padding: 0.5rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		color: var(--text-primary);
+		font-size: 0.75rem;
+		outline: none;
+		cursor: pointer;
+	}
+
+	.locale-select option {
+		background: var(--surface);
+		color: var(--text-primary);
 	}
 
 	.panels-grid {

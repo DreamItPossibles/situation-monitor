@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Panel } from '$lib/components/common';
+	import { t, locale } from 'svelte-i18n';
 
 	interface Prediction {
 		id: string;
@@ -20,24 +21,25 @@
 	const count = $derived(predictions.length);
 
 	function formatVolume(v: number | string): string {
+		const isZh = $locale?.startsWith('zh');
 		if (typeof v === 'string') return '$' + v;
 		if (!v) return '$0';
-		if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M';
-		if (v >= 1e3) return '$' + (v / 1e3).toFixed(0) + 'K';
+		if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + (isZh ? '百万' : 'M');
+		if (v >= 1e3) return '$' + (v / 1e3).toFixed(0) + (isZh ? '千' : 'K');
 		return '$' + v.toFixed(0);
 	}
 </script>
 
-<Panel id="polymarket" title="Polymarket" {count} {loading} {error}>
+<Panel id="polymarket" {count} {loading} {error}>
 	{#if predictions.length === 0 && !loading && !error}
-		<div class="empty-state">No predictions available</div>
+		<div class="empty-state">{$t('common.empty_state', { values: { type: 'Polymarket' } })}</div>
 	{:else}
 		<div class="predictions-list">
 			{#each predictions as pred (pred.id)}
 				<div class="prediction-item">
 					<div class="prediction-info">
 						<div class="prediction-question">{pred.question}</div>
-						<div class="prediction-volume">Vol: {formatVolume(pred.volume)}</div>
+						<div class="prediction-volume">{$t('common.vol')}: {formatVolume(pred.volume)}</div>
 					</div>
 					<div class="prediction-odds">
 						<span class="prediction-yes">{pred.yes}%</span>

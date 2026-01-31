@@ -53,6 +53,11 @@ export const FEEDS: Record<NewsCategory, FeedSource[]> = {
 	intel: [
 		{ name: 'CSIS', url: 'https://www.csis.org/analysis/feed' },
 		{ name: 'Brookings', url: 'https://www.brookings.edu/feed/' }
+	],
+	cn_news: [
+		{ name: '联合早报', url: 'https://www.zaobao.com.sg/rss/realtime/china' },
+		{ name: '华尔街日报中文', url: 'https://cn.wsj.com/zh-hans/rss' },
+		{ name: 'FT中文网', url: 'http://www.ftchinese.com/rss/news' }
 	]
 };
 

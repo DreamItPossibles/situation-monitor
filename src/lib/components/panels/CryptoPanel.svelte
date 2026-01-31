@@ -2,6 +2,7 @@
 	import { Panel } from '$lib/components/common';
 	import { crypto } from '$lib/stores';
 	import { formatCurrency, formatPercentChange, getChangeClass } from '$lib/utils';
+	import { t, locale } from 'svelte-i18n';
 
 	const items = $derived($crypto.items);
 	const loading = $derived($crypto.loading);
@@ -9,9 +10,11 @@
 	const count = $derived(items.length);
 </script>
 
-<Panel id="whales" title="Crypto" {count} {loading} {error}>
+<Panel id="crypto" {count} {loading} {error}>
 	{#if items.length === 0 && !loading && !error}
-		<div class="empty-state">No crypto data available</div>
+		<div class="empty-state">
+			{$t('common.empty_state', { values: { type: $t('panels.crypto') } })}
+		</div>
 	{:else}
 		<div class="crypto-list">
 			{#each items as coin (coin.id)}
@@ -22,7 +25,9 @@
 						<div class="crypto-symbol">{coin.symbol.toUpperCase()}</div>
 					</div>
 					<div class="crypto-data">
-						<div class="crypto-price">{formatCurrency(coin.current_price)}</div>
+						<div class="crypto-price">
+							{formatCurrency(coin.current_price, { locale: $locale ?? 'en-US' })}
+						</div>
 						<div class="crypto-change {changeClass}">
 							{formatPercentChange(coin.price_change_percentage_24h)}
 						</div>

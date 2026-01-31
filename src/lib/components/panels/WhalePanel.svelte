@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Panel } from '$lib/components/common';
+	import { t, locale } from 'svelte-i18n';
+	import { formatNumber } from '$lib/utils';
 
 	interface WhaleTransaction {
 		coin: string;
@@ -19,19 +21,20 @@
 	const count = $derived(whales.length);
 
 	function formatAmount(amt: number): string {
-		return amt >= 1000 ? (amt / 1000).toFixed(1) + 'K' : amt.toFixed(2);
+		return formatNumber(amt, 2, $locale ?? 'en-US');
 	}
 
 	function formatUSD(usd: number): string {
-		if (usd >= 1e9) return '$' + (usd / 1e9).toFixed(1) + 'B';
-		if (usd >= 1e6) return '$' + (usd / 1e6).toFixed(1) + 'M';
-		return '$' + (usd / 1e3).toFixed(0) + 'K';
+		const isZh = $locale?.startsWith('zh');
+		if (usd >= 1e9) return '$' + (usd / 1e9).toFixed(1) + (isZh ? '十亿' : 'B');
+		if (usd >= 1e6) return '$' + (usd / 1e6).toFixed(1) + (isZh ? '百万' : 'M');
+		return '$' + (usd / 1e3).toFixed(0) + (isZh ? '千' : 'K');
 	}
 </script>
 
-<Panel id="whales" title="Whale Watch" {count} {loading} {error}>
+<Panel id="whales" {count} {loading} {error}>
 	{#if whales.length === 0 && !loading && !error}
-		<div class="empty-state">No whale transactions detected</div>
+		<div class="empty-state">{$t('common.no_whales')}</div>
 	{:else}
 		<div class="whale-list">
 			{#each whales as whale, i (whale.hash + i)}

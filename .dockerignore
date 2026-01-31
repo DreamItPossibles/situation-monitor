@@ -1,0 +1,11 @@
+node_modules
+build
+.git
+.cursor
+.env
+.env.*
+tests
+playwright.config.ts
+vitest.config.ts
+CLAUDE.md
+README.md

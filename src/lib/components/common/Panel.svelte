@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { PanelId } from '$lib/config';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		id: PanelId;
-		title: string;
+		title?: string;
 		count?: number | string | null;
 		status?: string;
 		statusClass?: string;
@@ -41,12 +42,14 @@
 			onCollapse();
 		}
 	}
+
+	const displayTitle = $derived(title || $t(`panels.${id}`));
 </script>
 
 <div class="panel" class:draggable class:collapsed data-panel-id={id}>
 	<div class="panel-header">
 		<div class="panel-title-row">
-			<h3 class="panel-title">{title}</h3>
+			<h3 class="panel-title">{displayTitle}</h3>
 			{#if count !== null}
 				<span class="panel-count">{count}</span>
 			{/if}
@@ -78,7 +81,7 @@
 		{#if error}
 			<div class="error-msg">{error}</div>
 		{:else if loading}
-			<div class="loading-msg">Loading...</div>
+			<div class="loading-msg">{$t('common.loading')}</div>
 		{:else}
 			{@render children()}
 		{/if}

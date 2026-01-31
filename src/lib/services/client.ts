@@ -7,6 +7,7 @@ import { CircuitBreakerRegistry, type CircuitBreaker } from './circuit-breaker';
 import { RequestDeduplicator } from './deduplicator';
 import { ServiceRegistry, type ServiceConfig, type ServiceId } from './registry';
 import { ServiceError, NetworkError, TimeoutError, CircuitOpenError } from './errors';
+import { fetchWithProxy as proxyFetch } from '$lib/config/api';
 
 export interface RequestOptions {
 	params?: Record<string, string | number | boolean>;
@@ -183,7 +184,7 @@ export class ServiceClient {
 				}
 			};
 
-			const response = await fetch(url, fetchOptions);
+			const response = await proxyFetch(url, fetchOptions);
 
 			if (!response.ok) {
 				throw new NetworkError(`HTTP ${response.status}: ${response.statusText}`, response.status);
@@ -274,46 +275,22 @@ export class ServiceClient {
 
 	/**
 	 * Fetch through CORS proxy with fallback
+	 * Legacy method, now uses the unified proxyFetch
 	 */
 	async fetchWithProxy<T = string>(targetUrl: string, options: RequestOptions = {}): Promise<T> {
-		const proxies = ServiceRegistry.getCorsProxies();
-		const config = ServiceRegistry.get('CORS_PROXY');
-		if (!config) {
-			throw new ServiceError('CORS_PROXY service not configured');
-		}
-
-		let lastError: Error | undefined;
-
-		for (let i = 0; i < proxies.length; i++) {
-			const proxy = proxies[i];
-			const proxyUrl = proxy + encodeURIComponent(targetUrl);
-
-			try {
-				const response = await this.fetchWithTimeout<string>(
-					proxyUrl,
-					{
-						...options,
-						accept: 'application/rss+xml, application/xml, text/xml, */*',
-						responseType: 'text'
-					},
-					config
-				);
-
-				// Validate response (check for error pages)
-				if (
-					response &&
-					!response.includes('<!DOCTYPE html>') &&
-					!response.includes('error code:')
-				) {
-					return response as T;
-				}
-			} catch (e) {
-				this.log(`Proxy ${i + 1} failed: ${(e as Error).message}`);
-				lastError = e as Error;
+		const response = await proxyFetch(targetUrl, {
+			...options.fetchOptions,
+			headers: {
+				Accept: options.accept || 'application/rss+xml, application/xml, text/xml, */*',
+				...options.headers
 			}
+		});
+
+		if (!response.ok) {
+			throw new NetworkError(`HTTP ${response.status}: ${response.statusText}`, response.status);
 		}
 
-		throw lastError || new NetworkError('All CORS proxies failed');
+		return (await response.text()) as T;
 	}
 
 	/**

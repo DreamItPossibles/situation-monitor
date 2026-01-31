@@ -4,6 +4,7 @@
 
 import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
+import { locale as i18nLocale } from 'svelte-i18n';
 import {
 	PANELS,
 	NON_DRAGGABLE_PANELS,
@@ -17,7 +18,8 @@ import {
 const STORAGE_KEYS = {
 	panels: 'situationMonitorPanels',
 	order: 'panelOrder',
-	sizes: 'panelSizes'
+	sizes: 'panelSizes',
+	locale: 'locale'
 } as const;
 
 // Types
@@ -25,6 +27,7 @@ export interface PanelSettings {
 	enabled: Record<PanelId, boolean>;
 	order: PanelId[];
 	sizes: Record<PanelId, { width?: number; height?: number }>;
+	locale?: string;
 }
 
 export interface SettingsState extends PanelSettings {
@@ -38,7 +41,8 @@ function getDefaultSettings(): PanelSettings {
 	return {
 		enabled: Object.fromEntries(allPanelIds.map((id) => [id, true])) as Record<PanelId, boolean>,
 		order: allPanelIds,
-		sizes: {} as Record<PanelId, { width?: number; height?: number }>
+		sizes: {} as Record<PanelId, { width?: number; height?: number }>,
+		locale: 'zh'
 	};
 }
 
@@ -50,11 +54,13 @@ function loadFromStorage(): Partial<PanelSettings> {
 		const panels = localStorage.getItem(STORAGE_KEYS.panels);
 		const order = localStorage.getItem(STORAGE_KEYS.order);
 		const sizes = localStorage.getItem(STORAGE_KEYS.sizes);
+		const locale = localStorage.getItem(STORAGE_KEYS.locale);
 
 		return {
 			enabled: panels ? JSON.parse(panels) : undefined,
 			order: order ? JSON.parse(order) : undefined,
-			sizes: sizes ? JSON.parse(sizes) : undefined
+			sizes: sizes ? JSON.parse(sizes) : undefined,
+			locale: locale || undefined
 		};
 	} catch (e) {
 		console.warn('Failed to load settings from localStorage:', e);
@@ -82,6 +88,7 @@ function createSettingsStore() {
 		enabled: { ...defaults.enabled, ...saved.enabled },
 		order: saved.order ?? defaults.order,
 		sizes: { ...defaults.sizes, ...saved.sizes },
+		locale: saved.locale,
 		initialized: false
 	};
 
@@ -94,7 +101,23 @@ function createSettingsStore() {
 		 * Initialize store (call after hydration)
 		 */
 		init() {
-			update((state) => ({ ...state, initialized: true }));
+			update((state) => {
+				if (state.locale) {
+					i18nLocale.set(state.locale);
+				}
+				return { ...state, initialized: true };
+			});
+		},
+
+		/**
+		 * Set locale
+		 */
+		setLocale(locale: string) {
+			update((state) => {
+				saveToStorage('locale', locale);
+				i18nLocale.set(locale);
+				return { ...state, locale };
+			});
 		},
 
 		/**

@@ -3,6 +3,7 @@
 	import { timeAgo } from '$lib/utils';
 	import type { PanelId } from '$lib/config';
 	import type { NewsItem } from '$lib/types';
+	import { t, locale } from 'svelte-i18n';
 
 	interface SituationConfig {
 		title: string;
@@ -28,7 +29,7 @@
 		criticalKeywords: string[] = []
 	): { level: string; text: string } {
 		if (newsItems.length === 0) {
-			return { level: 'monitoring', text: 'MONITORING' };
+			return { level: 'monitoring', text: $t('threat.monitoring') };
 		}
 
 		const now = Date.now();
@@ -42,12 +43,12 @@
 		);
 
 		if (hasCritical || recentNews.length >= 3) {
-			return { level: 'critical', text: 'CRITICAL' };
+			return { level: 'critical', text: $t('threat.critical') };
 		}
 		if (recentNews.length >= 1) {
-			return { level: 'elevated', text: 'ELEVATED' };
+			return { level: 'elevated', text: $t('threat.elevated') };
 		}
-		return { level: 'monitoring', text: 'MONITORING' };
+		return { level: 'monitoring', text: $t('threat.monitoring') };
 	}
 </script>
 
@@ -66,7 +67,7 @@
 		</div>
 
 		{#if news.length === 0 && !loading && !error}
-			<div class="empty-state">No recent news</div>
+			<div class="empty-state">{$t('common.no_news')}</div>
 		{:else}
 			<div class="situation-news">
 				{#each news.slice(0, 8) as item (item.id)}
@@ -74,7 +75,7 @@
 						<a href={item.link} target="_blank" rel="noopener noreferrer" class="headline">
 							{item.title}
 						</a>
-						<div class="meta">{item.source} · {timeAgo(item.timestamp)}</div>
+						<div class="meta">{item.source} · {timeAgo(item.timestamp, $locale ?? 'en-US')}</div>
 					</div>
 				{/each}
 			</div>

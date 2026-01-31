@@ -25,6 +25,7 @@ export type PanelId =
 	| 'contracts'
 	| 'ai'
 	| 'layoffs'
+	| 'cn_news'
 	| 'venezuela'
 	| 'greenland'
 	| 'iran'
@@ -32,11 +33,13 @@ export type PanelId =
 	| 'intel'
 	| 'correlation'
 	| 'narrative'
+	| 'chinese-api'
 	| 'fed';
 
 export const PANELS: Record<PanelId, PanelConfig> = {
 	map: { name: 'Global Map', priority: 1 },
 	politics: { name: 'World / Geopolitical', priority: 1 },
+	cn_news: { name: 'Chinese News', priority: 1 },
 	tech: { name: 'Technology / AI', priority: 1 },
 	finance: { name: 'Financial', priority: 1 },
 	gov: { name: 'Government / Policy', priority: 2 },
@@ -59,7 +62,8 @@ export const PANELS: Record<PanelId, PanelConfig> = {
 	intel: { name: 'Intel Feed', priority: 2 },
 	correlation: { name: 'Correlation Engine', priority: 1 },
 	narrative: { name: 'Narrative Tracker', priority: 1 },
-	fed: { name: 'Federal Reserve', priority: 1 }
+	fed: { name: 'Federal Reserve', priority: 1 },
+	'chinese-api': { name: 'Chinese News API', priority: 1 }
 };
 
 export const NON_DRAGGABLE_PANELS: PanelId[] = ['map'];

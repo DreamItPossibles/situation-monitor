@@ -1,0 +1,187 @@
+{
+	"common": {
+		"loading": "Loading...",
+		"error": "Error",
+		"settings": "Settings",
+		"close": "Close",
+		"reset": "Reset",
+		"save": "Save",
+		"cancel": "Cancel",
+		"everything": "Everything",
+		"logo": "SITUATION MONITOR",
+		"no_news": "No news available",
+		"no_data": "No data available",
+		"empty_state": "No {type} available",
+		"no_whales": "No whale transactions detected",
+		"no_intel": "No intel available",
+		"vol": "Vol",
+		"mentions": "{count} mentions",
+		"active": "active",
+		"since": "Since {date}",
+		"threat": {
+			"monitoring": "MONITORING",
+			"elevated": "ELEVATED",
+			"critical": "CRITICAL"
+		},
+		"vix": {
+			"high": "HIGH FEAR",
+			"elevated": "ELEVATED",
+			"low": "LOW"
+		},
+		"mainchar": {
+			"label": "Today's Main Character",
+			"mentions": "{count} mentions in headlines"
+		},
+		"printer": {
+			"on": "PRINTER ON",
+			"off": "PRINTER OFF",
+			"label": "Federal Reserve Balance Sheet",
+			"wow": "WoW"
+		},
+		"narratives": {
+			"emerging": "Emerging Fringe",
+			"crossover": "Fringe → Mainstream Crossovers",
+			"watch": "Narrative Watch",
+			"disinfo": "Disinfo Signals",
+			"no_data": "Insufficient data for narrative analysis",
+			"none_detected": "No significant narratives detected",
+			"crossover_level": "Crossover level: {level}%",
+			"fringe": "Fringe ({count})",
+			"mainstream": "Mainstream ({count})"
+		},
+		"monitors": {
+			"none": "No monitors configured",
+			"create": "Create Monitor",
+			"active_count": "{count} active",
+			"enable": "Enable",
+			"disable": "Disable",
+			"edit": "Edit",
+			"delete": "Delete",
+			"name": "Name",
+			"keywords": "Keywords (comma separated)",
+			"keywords_hint": "News matching any of these keywords will appear in your monitor",
+			"enabled": "Enabled",
+			"save": "Save Changes",
+			"error_name": "Name is required",
+			"error_keywords": "At least one keyword is required",
+			"error_max": "Maximum number of monitors reached (20)"
+		},
+		"map": {
+			"zoom_in": "Zoom in",
+			"zoom_out": "Zoom out",
+			"reset": "Reset",
+			"high": "High",
+			"elevated": "Elevated",
+			"low": "Low"
+		},
+		"layoffs": {
+			"jobs": "{count} jobs",
+			"no_data": "No recent layoffs data"
+		},
+		"fed": {
+			"api_key_required": "Add VITE_FRED_API_KEY for economic indicators",
+			"speeches_video": "Speeches & Video",
+			"live_broadcast": "Live Broadcast",
+			"no_news": "No Fed news available"
+		},
+		"correlation": {
+			"emerging": "Emerging Patterns",
+			"momentum": "Momentum Signals",
+			"cross_source": "Cross-Source Links",
+			"predictive": "Predictive Signals",
+			"no_data": "Insufficient data for analysis",
+			"none_detected": "No significant patterns detected",
+			"items_count": "({count} items)",
+			"sources_count": "({count} sources)",
+			"confidence": "Confidence: {level}%"
+		}
+	},
+	"header": {
+		"refreshing": "Refreshing...",
+		"last_updated": "Last updated: {time}",
+		"never_refreshed": "Never refreshed"
+	},
+	"onboarding": {
+		"title": "Welcome to Situation Monitor",
+		"subtitle": "Choose a dashboard configuration to get started",
+		"skip": "Skip onboarding",
+		"hint": "You can change this later in Settings",
+		"panels_count": "{count} panels"
+	},
+	"settings": {
+		"title": "Settings",
+		"enabled_panels": "Enabled Panels",
+		"enabled_panels_desc": "Toggle panels on/off to customize your dashboard",
+		"dashboard": "Dashboard",
+		"reconfigure": "Reconfigure Dashboard",
+		"reconfigure_hint": "Choose a preset profile for your panels",
+		"reset_all": "Reset All Settings",
+		"language": "Language"
+	},
+	"panels": {
+		"map": "Global Map",
+		"politics": "World / Geopolitical",
+		"cn_news": "Chinese News",
+		"tech": "Technology / AI",
+		"finance": "Financial",
+		"gov": "Government / Policy",
+		"heatmap": "Sector Heatmap",
+		"markets": "Markets",
+		"monitors": "My Monitors",
+		"commodities": "Commodities / VIX",
+		"crypto": "Crypto",
+		"polymarket": "Polymarket",
+		"whales": "Whale Watch",
+		"mainchar": "Main Character",
+		"printer": "Money Printer",
+		"contracts": "Gov Contracts",
+		"ai": "AI Arms Race",
+		"layoffs": "Layoffs Tracker",
+		"venezuela": "Venezuela Situation",
+		"greenland": "Greenland Situation",
+		"iran": "Iran Situation",
+		"leaders": "World Leaders",
+		"intel": "Intel Feed",
+		"correlation": "Correlation Engine",
+		"narrative": "Narrative Tracker",
+		"fed": "Federal Reserve",
+		"venezuela": {
+			"title": "Venezuela Watch",
+			"subtitle": "Humanitarian crisis monitoring"
+		},
+		"greenland": {
+			"title": "Greenland Watch",
+			"subtitle": "Arctic geopolitics monitoring"
+		},
+		"iran": {
+			"title": "Iran Crisis",
+			"subtitle": "Revolution protests, regime instability & nuclear program"
+		}
+	},
+	"presets": {
+		"news-junkie": {
+			"name": "News Junkie",
+			"description": "Stay on top of breaking news across politics, tech, and finance"
+		},
+		"trader": {
+			"name": "Trader",
+			"description": "Market-focused dashboard with stocks, crypto, and commodities"
+		},
+		"geopolitics": {
+			"name": "Geopolitics Watcher",
+			"description": "Global situation awareness and regional hotspots"
+		},
+		"intel": {
+			"name": "Intelligence Analyst",
+			"description": "Deep analysis, pattern detection, and narrative tracking"
+		},
+		"minimal": {
+			"name": "Minimal",
+			"description": "Just the essentials - map, news, and markets"
+		},
+		"everything": {
+			"name": "Everything",
+			"description": "Kitchen sink - all panels enabled"
+		}
+	}
+}

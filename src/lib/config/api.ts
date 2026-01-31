@@ -1,5 +1,6 @@
 /**
  * API Configuration
+ * Optimized for Zero-Budget deployment in restricted network environments (China)
  */
 
 import { browser } from '$app/environment';
@@ -7,7 +8,6 @@ import { browser } from '$app/environment';
 /**
  * Finnhub API key
  * Get your free key at: https://finnhub.io/
- * Free tier: 60 calls/minute
  */
 export const FINNHUB_API_KEY = browser
 	? (import.meta.env?.VITE_FINNHUB_API_KEY ?? '')
@@ -17,8 +17,6 @@ export const FINNHUB_BASE_URL = 'https://finnhub.io/api/v1';
 
 /**
  * FRED API key (St. Louis Fed)
- * Get your free key at: https://fred.stlouisfed.org/docs/api/api_key.html
- * Free tier: Unlimited requests
  */
 export const FRED_API_KEY = browser
 	? (import.meta.env?.VITE_FRED_API_KEY ?? '')
@@ -28,44 +26,40 @@ export const FRED_BASE_URL = 'https://api.stlouisfed.org/fred';
 
 /**
  * Check if we're in development mode
- * Uses import.meta.env which is available in both browser and test environments
  */
 const isDev = browser ? (import.meta.env?.DEV ?? false) : false;
 
 /**
- * CORS proxy URLs for external API requests
- * Primary: Custom Cloudflare Worker (faster, dedicated)
- * Fallback: corsproxy.io (public, may rate limit)
+ * Fetch with Smart Proxy Failover
+ * Now uses the built-in server-side proxy for maximum reliability
  */
-export const CORS_PROXIES = {
-	primary: 'https://situation-monitor-proxy.seanthielen-e.workers.dev/?url=',
-	fallback: 'https://corsproxy.io/?url='
-} as const;
-
-// Default export for backward compatibility
-export const CORS_PROXY_URL = CORS_PROXIES.fallback;
-
-/**
- * Fetch with CORS proxy fallback
- * Tries primary proxy first, falls back to secondary on failure
- */
-export async function fetchWithProxy(url: string): Promise<Response> {
-	const encodedUrl = encodeURIComponent(url);
-
-	// Try primary proxy first
-	try {
-		const response = await fetch(CORS_PROXIES.primary + encodedUrl);
-		if (response.ok) {
-			return response;
+export async function fetchWithProxy(url: string, options: RequestInit = {}): Promise<Response> {
+	// Rule 1: Chinese sources go DIRECT from browser if possible (Maximum speed)
+	if (url.includes('sourcelang:chinese') || url.includes('.cn')) {
+		try {
+			const res = await fetch(url, options);
+			if (res.ok) return res;
+		} catch {
+			// Fallback to internal proxy if browser fetch fails
 		}
-		// If we get an error response, try fallback
-		logger.warn('API', `Primary proxy failed (${response.status}), trying fallback`);
-	} catch (error) {
-		logger.warn('API', 'Primary proxy error, trying fallback:', error);
 	}
 
-	// Fallback to secondary proxy
-	return fetch(CORS_PROXIES.fallback + encodedUrl);
+	// Use our internal Node.js proxy route
+	// This solves CORS and allows the server to handle the proxy failover chain
+	const internalProxyUrl = `/api/proxy?url=${encodeURIComponent(url)}`;
+
+	try {
+		const res = await fetch(internalProxyUrl, options);
+		if (res.ok) return res;
+		throw new Error(`Internal proxy returned ${res.status}`);
+	} catch {
+		logger.error(
+			'API',
+			`Internal proxy failed for ${url}, trying direct browser fallback as last resort`
+		);
+		// Last resort: try to fetch directly from browser (will likely fail CORS but better than nothing)
+		return fetch(url, options);
+	}
 }
 
 /**
@@ -80,10 +74,10 @@ export const API_DELAYS = {
  * Cache TTLs (ms)
  */
 export const CACHE_TTLS = {
-	weather: 10 * 60 * 1000, // 10 minutes
-	news: 5 * 60 * 1000, // 5 minutes
-	markets: 60 * 1000, // 1 minute
-	default: 5 * 60 * 1000 // 5 minutes
+	weather: 10 * 60 * 1000,
+	news: 5 * 60 * 1000,
+	markets: 60 * 1000,
+	default: 5 * 60 * 1000
 } as const;
 
 /**
@@ -96,7 +90,7 @@ export const DEBUG = {
 } as const;
 
 /**
- * Conditional logger - only logs in development
+ * Conditional logger
  */
 export const logger = {
 	log: (prefix: string, ...args: unknown[]) => {

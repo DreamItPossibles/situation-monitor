@@ -5,31 +5,32 @@
 /**
  * Format relative time from a date
  */
-export function timeAgo(dateInput: string | number | Date): string {
+export function timeAgo(dateInput: string | number | Date, locale = 'en-US'): string {
 	const date = new Date(dateInput);
 	const now = new Date();
 	const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-	if (seconds < 60) return 'just now';
-	if (seconds < 3600) return Math.floor(seconds / 60) + 'm';
-	if (seconds < 86400) return Math.floor(seconds / 3600) + 'h';
-	return Math.floor(seconds / 86400) + 'd';
+	if (seconds < 60) return locale.startsWith('zh') ? '刚刚' : 'just now';
+	if (seconds < 3600) return Math.floor(seconds / 60) + (locale.startsWith('zh') ? '分钟前' : 'm');
+	if (seconds < 86400)
+		return Math.floor(seconds / 3600) + (locale.startsWith('zh') ? '小时前' : 'h');
+	return Math.floor(seconds / 86400) + (locale.startsWith('zh') ? '天前' : 'd');
 }
 
 /**
  * Get relative time with more detail
  */
-export function getRelativeTime(dateInput: string | number | Date): string {
+export function getRelativeTime(dateInput: string | number | Date, locale = 'en-US'): string {
 	const date = new Date(dateInput);
 	const now = new Date();
 	const diff = now.getTime() - date.getTime();
 	const hours = Math.floor(diff / (1000 * 60 * 60));
 	const days = Math.floor(hours / 24);
 
-	if (hours < 1) return 'Just now';
-	if (hours < 24) return `${hours}h ago`;
-	if (days < 7) return `${days}d ago`;
-	return date.toLocaleDateString();
+	if (hours < 1) return locale.startsWith('zh') ? '刚刚' : 'Just now';
+	if (hours < 24) return locale.startsWith('zh') ? `${hours}小时前` : `${hours}h ago`;
+	if (days < 7) return locale.startsWith('zh') ? `${days}天前` : `${days}d ago`;
+	return date.toLocaleDateString(locale);
 }
 
 /**
@@ -37,9 +38,9 @@ export function getRelativeTime(dateInput: string | number | Date): string {
  */
 export function formatCurrency(
 	value: number,
-	options: { decimals?: number; compact?: boolean; symbol?: string } = {}
+	options: { decimals?: number; compact?: boolean; symbol?: string; locale?: string } = {}
 ): string {
-	const { decimals = 2, compact = false, symbol = '$' } = options;
+	const { decimals = 2, compact = false, symbol = '$', locale = 'en-US' } = options;
 
 	if (compact) {
 		if (Math.abs(value) >= 1e12) return symbol + (value / 1e12).toFixed(1) + 'T';
@@ -48,16 +49,18 @@ export function formatCurrency(
 		if (Math.abs(value) >= 1e3) return symbol + (value / 1e3).toFixed(0) + 'K';
 	}
 
-	return symbol + value.toLocaleString('en-US', { maximumFractionDigits: decimals });
+	return symbol + value.toLocaleString(locale, { maximumFractionDigits: decimals });
 }
 
 /**
  * Format number with compact notation
  */
-export function formatNumber(value: number, decimals = 2): string {
-	if (Math.abs(value) >= 1e9) return (value / 1e9).toFixed(1) + 'B';
-	if (Math.abs(value) >= 1e6) return (value / 1e6).toFixed(1) + 'M';
-	if (Math.abs(value) >= 1e3) return (value / 1e3).toFixed(1) + 'K';
+export function formatNumber(value: number, decimals = 2, locale = 'en-US'): string {
+	const isZh = locale.startsWith('zh');
+
+	if (Math.abs(value) >= 1e9) return (value / 1e9).toFixed(1) + (isZh ? '十亿' : 'B');
+	if (Math.abs(value) >= 1e6) return (value / 1e6).toFixed(1) + (isZh ? '百万' : 'M');
+	if (Math.abs(value) >= 1e3) return (value / 1e3).toFixed(1) + (isZh ? '千' : 'K');
 	return value.toFixed(decimals);
 }
 

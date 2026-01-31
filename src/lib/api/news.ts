@@ -61,13 +61,14 @@ function transformGdeltArticle(
 	article: GdeltArticle,
 	category: NewsCategory,
 	source: string,
-	index: number
+	index: number,
+	lang: 'en' | 'zh' = 'en'
 ): NewsItem {
 	const title = article.title || '';
 	const alert = containsAlertKeyword(title);
 	// Generate unique ID using category, URL hash, and index
 	const urlHash = article.url ? hashCode(article.url) : Math.random().toString(36).slice(2);
-	const uniqueId = `gdelt-${category}-${urlHash}-${index}`;
+	const uniqueId = `gdelt-${category}-${lang}-${urlHash}-${index}`;
 
 	const parsedDate = parseGdeltDate(article.seendate);
 
@@ -82,14 +83,18 @@ function transformGdeltArticle(
 		isAlert: !!alert,
 		alertKeyword: alert?.keyword || undefined,
 		region: detectRegion(title) ?? undefined,
-		topics: detectTopics(title)
+		topics: detectTopics(title),
+		lang
 	};
 }
 
 /**
  * Fetch news for a specific category using GDELT via proxy
  */
-export async function fetchCategoryNews(category: NewsCategory): Promise<NewsItem[]> {
+export async function fetchCategoryNews(
+	category: NewsCategory,
+	lang: 'en' | 'zh' = 'en'
+): Promise<NewsItem[]> {
 	// Build query from category keywords (GDELT requires OR queries in parentheses)
 	const categoryQueries: Record<NewsCategory, string> = {
 		politics: '(politics OR government OR election OR congress)',
@@ -97,17 +102,20 @@ export async function fetchCategoryNews(category: NewsCategory): Promise<NewsIte
 		finance: '(finance OR "stock market" OR economy OR banking)',
 		gov: '("federal government" OR "white house" OR congress OR regulation)',
 		ai: '("artificial intelligence" OR "machine learning" OR AI OR ChatGPT)',
-		intel: '(intelligence OR security OR military OR defense)'
+		intel: '(intelligence OR security OR military OR defense)',
+		cn_news: '(China OR Beijing OR Shanghai OR "Chinese government")'
 	};
 
 	try {
-		// Add English language filter and timespan for fresh results
 		const baseQuery = categoryQueries[category];
-		const fullQuery = `${baseQuery} sourcelang:english`;
-		// Build the raw GDELT URL with timespan=7d to get recent articles
-		const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${fullQuery}&timespan=7d&mode=artlist&maxrecords=20&format=json&sort=date`;
+		const langFilter = lang === 'en' ? 'sourcelang:english' : 'sourcelang:chinese';
+		const fullQuery = `${baseQuery} ${langFilter}`;
+		const maxRecords = lang === 'en' ? 15 : 10;
 
-		logger.log('News API', `Fetching ${category} from GDELT`);
+		// Build the raw GDELT URL with timespan=7d to get recent articles
+		const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${fullQuery}&timespan=7d&mode=artlist&maxrecords=${maxRecords}&format=json&sort=date`;
+
+		logger.log('News API', `Fetching ${category} (${lang}) from GDELT`);
 
 		const response = await fetchWithProxy(gdeltUrl);
 		if (!response.ok) {
@@ -137,20 +145,36 @@ export async function fetchCategoryNews(category: NewsCategory): Promise<NewsIte
 		const defaultSource = categoryFeeds[0]?.name || 'News';
 
 		return data.articles.map((article, index) =>
-			transformGdeltArticle(article, category, article.domain || defaultSource, index)
+			transformGdeltArticle(article, category, article.domain || defaultSource, index, lang)
 		);
 	} catch (error) {
-		logger.error('News API', `Error fetching ${category}:`, error);
+		logger.error('News API', `Error fetching ${category} (${lang}):`, error);
 		return [];
 	}
 }
 
 /** All news categories in fetch order */
-const NEWS_CATEGORIES: NewsCategory[] = ['politics', 'tech', 'finance', 'gov', 'ai', 'intel'];
+const NEWS_CATEGORIES: NewsCategory[] = [
+	'politics',
+	'cn_news',
+	'tech',
+	'finance',
+	'gov',
+	'ai',
+	'intel'
+];
 
 /** Create an empty news result object */
 function createEmptyNewsResult(): Record<NewsCategory, NewsItem[]> {
-	return { politics: [], tech: [], finance: [], gov: [], ai: [], intel: [] };
+	return {
+		politics: [],
+		cn_news: [],
+		tech: [],
+		finance: [],
+		gov: [],
+		ai: [],
+		intel: []
+	};
 }
 
 /**
@@ -166,7 +190,14 @@ export async function fetchAllNews(): Promise<Record<NewsCategory, NewsItem[]>> 
 			await delay(API_DELAYS.betweenCategories);
 		}
 
-		result[category] = await fetchCategoryNews(category);
+		// Fetch both English and Chinese news
+		const [enNews, zhNews] = await Promise.all([
+			fetchCategoryNews(category, 'en'),
+			fetchCategoryNews(category, 'zh')
+		]);
+
+		// Merge and sort by timestamp
+		result[category] = [...enNews, ...zhNews].sort((a, b) => b.timestamp - a.timestamp);
 	}
 
 	return result;

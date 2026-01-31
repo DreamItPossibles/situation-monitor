@@ -1,0 +1,187 @@
+{
+	"common": {
+		"loading": "加载中...",
+		"error": "错误",
+		"settings": "设置",
+		"close": "关闭",
+		"reset": "重置",
+		"save": "保存",
+		"cancel": "取消",
+		"everything": "全部",
+		"logo": "状态监控",
+		"no_news": "暂无新闻",
+		"no_data": "暂无数据",
+		"empty_state": "暂无 {type}",
+		"no_whales": "未检测到巨鲸交易",
+		"no_intel": "暂无情报数据",
+		"vol": "成交量",
+		"mentions": "{count} 次提及",
+		"active": "启用",
+		"since": "始于 {date}",
+		"threat": {
+			"monitoring": "正在监控",
+			"elevated": "级别提升",
+			"critical": "紧急状态"
+		},
+		"vix": {
+			"high": "极度恐慌",
+			"elevated": "恐慌上升",
+			"low": "低恐慌"
+		},
+		"mainchar": {
+			"label": "今日核心角色",
+			"mentions": "标题中提及 {count} 次"
+		},
+		"printer": {
+			"on": "印钞机开启",
+			"off": "印钞机关闭",
+			"label": "美联储资产负债表",
+			"wow": "周环比"
+		},
+		"narratives": {
+			"emerging": "新兴边缘叙事",
+			"crossover": "边缘 → 主流 交叉叙事",
+			"watch": "叙事观察",
+			"disinfo": "虚假信息信号",
+			"no_data": "数据不足，无法进行叙事分析",
+			"none_detected": "未检测到显著叙事",
+			"crossover_level": "交叉水平：{level}%",
+			"fringe": "边缘 ({count})",
+			"mainstream": "主流 ({count})"
+		},
+		"monitors": {
+			"none": "尚未配置监控器",
+			"create": "创建监控器",
+			"active_count": "{count} 个已启用",
+			"enable": "启用",
+			"disable": "禁用",
+			"edit": "编辑",
+			"delete": "删除",
+			"name": "名称",
+			"keywords": "关键词（逗号分隔）",
+			"keywords_hint": "匹配这些关键词的新闻将出现在您的监控器中",
+			"enabled": "已启用",
+			"save": "保存更改",
+			"error_name": "名称必填",
+			"error_keywords": "至少需要一个关键词",
+			"error_max": "已达到监控器最大数量 (20)"
+		},
+		"map": {
+			"zoom_in": "放大",
+			"zoom_out": "缩小",
+			"reset": "重置",
+			"high": "高",
+			"elevated": "较高",
+			"low": "低"
+		},
+		"layoffs": {
+			"jobs": "{count} 个职位",
+			"no_data": "暂无近期裁员数据"
+		},
+		"fed": {
+			"api_key_required": "请添加 VITE_FRED_API_KEY 以显示经济指标",
+			"speeches_video": "演讲与视频",
+			"live_broadcast": "实时直播",
+			"no_news": "暂无美联储新闻"
+		},
+		"correlation": {
+			"emerging": "新兴模式",
+			"momentum": "动量信号",
+			"cross_source": "跨源链接",
+			"predictive": "预测信号",
+			"no_data": "数据不足，无法分析",
+			"none_detected": "未检测到显著模式",
+			"items_count": "({count} 项)",
+			"sources_count": "({count} 个来源)",
+			"confidence": "置信度：{level}%"
+		}
+	},
+	"header": {
+		"refreshing": "刷新中...",
+		"last_updated": "最后更新：{time}",
+		"never_refreshed": "未刷新"
+	},
+	"onboarding": {
+		"title": "欢迎使用状态监控",
+		"subtitle": "选择一个仪表盘配置开始使用",
+		"skip": "跳过引导",
+		"hint": "稍后您可以在设置中更改此项",
+		"panels_count": "{count} 个面板"
+	},
+	"settings": {
+		"title": "设置",
+		"enabled_panels": "已启用面板",
+		"enabled_panels_desc": "开启或关闭面板以自定义您的仪表盘",
+		"dashboard": "仪表盘",
+		"reconfigure": "重新配置仪表盘",
+		"reconfigure_hint": "为您的面板选择一个预设配置文件",
+		"reset_all": "重置所有设置",
+		"language": "语言"
+	},
+	"panels": {
+		"map": "全球地图",
+		"politics": "世界 / 地缘政治",
+		"cn_news": "中文要闻",
+		"tech": "科技 / 人工智能",
+		"finance": "金融",
+		"gov": "政府 / 政策",
+		"heatmap": "行业热力图",
+		"markets": "市场",
+		"monitors": "我的监控",
+		"commodities": "商品 / 恐慌指数",
+		"crypto": "加密货币",
+		"polymarket": "预测市场 (Polymarket)",
+		"whales": "巨鲸监控",
+		"mainchar": "核心角色",
+		"printer": "印钞机",
+		"contracts": "政府合同",
+		"ai": "人工智能竞赛",
+		"layoffs": "裁员追踪",
+		"venezuela": "委内瑞拉局势",
+		"greenland": "格陵兰局势",
+		"iran": "伊朗局势",
+		"leaders": "世界领袖",
+		"intel": "情报反馈",
+		"correlation": "关联引擎",
+		"narrative": "叙事追踪",
+		"fed": "美联储",
+		"venezuela": {
+			"title": "委内瑞拉观察",
+			"subtitle": "人道主义危机监控"
+		},
+		"greenland": {
+			"title": "格陵兰观察",
+			"subtitle": "北极地缘政治监控"
+		},
+		"iran": {
+			"title": "伊朗危机",
+			"subtitle": "革命抗议、政权不稳及核计划"
+		}
+	},
+	"presets": {
+		"news-junkie": {
+			"name": "资讯狂人",
+			"description": "实时掌握政治、科技和金融领域的重大新闻"
+		},
+		"trader": {
+			"name": "交易员",
+			"description": "专注于市场的仪表盘，包含股票、加密货币和商品"
+		},
+		"geopolitics": {
+			"name": "地缘政治观察员",
+			"description": "全球局势感知和地区热点追踪"
+		},
+		"intel": {
+			"name": "情报分析师",
+			"description": "深度分析、模式检测和叙事追踪"
+		},
+		"minimal": {
+			"name": "极简主义",
+			"description": "仅保留核心内容 - 地图、新闻和市场"
+		},
+		"everything": {
+			"name": "全部内容",
+			"description": "开启所有面板，获取最全面的监控"
+		}
+	}
+}

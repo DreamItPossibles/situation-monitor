@@ -18,11 +18,11 @@
 		ContractsPanel,
 		LayoffsPanel,
 		IntelPanel,
-		SituationPanel,
 		WorldLeadersPanel,
 		PrinterPanel,
 		FedPanel
 	} from '$lib/components/panels';
+	import ChineseApiPanel from '$lib/components/panels/ChineseApiPanel.svelte';
 	import {
 		news,
 		markets,
@@ -33,6 +33,7 @@
 		fedIndicators,
 		fedNews
 	} from '$lib/stores';
+	import { t } from 'svelte-i18n';
 	import {
 		fetchAllNews,
 		fetchAllMarkets,
@@ -65,7 +66,7 @@
 	// Data fetching
 	async function loadNews() {
 		// Set loading for all categories
-		const categories = ['politics', 'tech', 'finance', 'gov', 'ai', 'intel'] as const;
+		const categories = ['politics', 'tech', 'finance', 'gov', 'ai', 'intel', 'cn_news'] as const;
 		categories.forEach((cat) => news.setLoading(cat, true));
 
 		try {
@@ -217,7 +218,7 @@
 </script>
 
 <svelte:head>
-	<title>Situation Monitor</title>
+	<title>{$t('common.logo')}</title>
 	<meta name="description" content="Real-time global situation monitoring dashboard" />
 </svelte:head>
 
@@ -237,6 +238,12 @@
 			{#if isPanelVisible('politics')}
 				<div class="panel-slot">
 					<NewsPanel category="politics" panelId="politics" title="Politics" />
+				</div>
+			{/if}
+
+			{#if isPanelVisible('cn_news')}
+				<div class="panel-slot">
+					<NewsPanel category="cn_news" panelId="cn_news" title={$t('panels.cn_news')} />
 				</div>
 			{/if}
 
@@ -330,71 +337,7 @@
 			{/if}
 
 			<!-- Situation Panels -->
-			{#if isPanelVisible('venezuela')}
-				<div class="panel-slot">
-					<SituationPanel
-						panelId="venezuela"
-						config={{
-							title: 'Venezuela Watch',
-							subtitle: 'Humanitarian crisis monitoring',
-							criticalKeywords: ['maduro', 'caracas', 'venezuela', 'guaido']
-						}}
-						news={$allNewsItems.filter(
-							(n) =>
-								n.title.toLowerCase().includes('venezuela') ||
-								n.title.toLowerCase().includes('maduro')
-						)}
-					/>
-				</div>
-			{/if}
-
-			{#if isPanelVisible('greenland')}
-				<div class="panel-slot">
-					<SituationPanel
-						panelId="greenland"
-						config={{
-							title: 'Greenland Watch',
-							subtitle: 'Arctic geopolitics monitoring',
-							criticalKeywords: ['greenland', 'arctic', 'nuuk', 'denmark']
-						}}
-						news={$allNewsItems.filter(
-							(n) =>
-								n.title.toLowerCase().includes('greenland') ||
-								n.title.toLowerCase().includes('arctic')
-						)}
-					/>
-				</div>
-			{/if}
-
-			{#if isPanelVisible('iran')}
-				<div class="panel-slot">
-					<SituationPanel
-						panelId="iran"
-						config={{
-							title: 'Iran Crisis',
-							subtitle: 'Revolution protests, regime instability & nuclear program',
-							criticalKeywords: [
-								'protest',
-								'uprising',
-								'revolution',
-								'crackdown',
-								'killed',
-								'nuclear',
-								'strike',
-								'attack',
-								'irgc',
-								'khamenei'
-							]
-						}}
-						news={$allNewsItems.filter(
-							(n) =>
-								n.title.toLowerCase().includes('iran') ||
-								n.title.toLowerCase().includes('tehran') ||
-								n.title.toLowerCase().includes('irgc')
-						)}
-					/>
-				</div>
-			{/if}
+			<!-- Removed redundant situation panels to restore original look -->
 
 			<!-- Placeholder panels for additional data sources -->
 			{#if isPanelVisible('whales')}
@@ -442,6 +385,11 @@
 				</div>
 			{/if}
 		</Dashboard>
+
+		<!-- Dedicated Chinese API Section at the bottom -->
+		<div class="chinese-api-section">
+			<ChineseApiPanel />
+		</div>
 	</main>
 
 	<!-- Modals -->
@@ -475,6 +423,13 @@
 	.map-slot {
 		column-span: all;
 		margin-bottom: 0.5rem;
+	}
+
+	.chinese-api-section {
+		margin-top: 2rem;
+		padding: 1rem;
+		border-top: 1px solid var(--border);
+		background: var(--bg-secondary);
 	}
 
 	@media (max-width: 768px) {
