@@ -16,6 +16,7 @@
 		regions: string[];
 		topics: string[];
 		pubDate?: string;
+		timestamp?: number;
 		isPriority?: boolean;
 	}
 
@@ -45,6 +46,7 @@
 			regions: item.region ? [item.region] : [],
 			topics: item.topics || [],
 			pubDate: item.pubDate,
+			timestamp: item.timestamp,
 			isPriority: item.isAlert
 		};
 	}
@@ -90,9 +92,9 @@
 					<a href={item.link} target="_blank" rel="noopener noreferrer" class="intel-title">
 						{item.title}
 					</a>
-					{#if item.pubDate}
+					{#if item.timestamp && !isNaN(item.timestamp)}
 						<div class="intel-meta">
-							<span>{getRelativeTime(item.pubDate, $locale ?? 'en-US')}</span>
+							<span>{getRelativeTime(item.timestamp, $locale ?? 'en-US')}</span>
 						</div>
 					{/if}
 				</div>

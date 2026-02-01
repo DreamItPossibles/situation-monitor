@@ -76,7 +76,7 @@ function transformGdeltArticle(
 		id: uniqueId,
 		title,
 		link: article.url,
-		pubDate: article.seendate,
+		pubDate: parsedDate.toISOString(),
 		timestamp: parsedDate.getTime(),
 		source: source || article.domain || 'Unknown',
 		category,

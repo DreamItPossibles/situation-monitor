@@ -5,8 +5,10 @@
 /**
  * Format relative time from a date
  */
-export function timeAgo(dateInput: string | number | Date, locale = 'en-US'): string {
+export function timeAgo(dateInput: string | number | Date | undefined | null, locale = 'en-US'): string {
+	if (!dateInput) return '';
 	const date = new Date(dateInput);
+	if (isNaN(date.getTime())) return '';
 	const now = new Date();
 	const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -20,8 +22,10 @@ export function timeAgo(dateInput: string | number | Date, locale = 'en-US'): st
 /**
  * Get relative time with more detail
  */
-export function getRelativeTime(dateInput: string | number | Date, locale = 'en-US'): string {
+export function getRelativeTime(dateInput: string | number | Date | undefined | null, locale = 'en-US'): string {
+	if (!dateInput) return '';
 	const date = new Date(dateInput);
+	if (isNaN(date.getTime())) return '';
 	const now = new Date();
 	const diff = now.getTime() - date.getTime();
 	const hours = Math.floor(diff / (1000 * 60 * 60));

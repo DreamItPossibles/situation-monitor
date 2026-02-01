@@ -592,22 +592,22 @@
 			</div>
 		{/if}
 		<div class="zoom-controls">
-			<button class="zoom-btn" onclick={zoomIn} title={$t('map.zoom_in')}>+</button>
-			<button class="zoom-btn" onclick={zoomOut} title={$t('map.zoom_out')}>−</button>
-			<button class="zoom-btn" onclick={resetZoom} title={$t('map.reset')}>⟲</button>
+			<button class="zoom-btn" onclick={zoomIn} title={$t('common.map.zoom_in')}>+</button>
+			<button class="zoom-btn" onclick={zoomOut} title={$t('common.map.zoom_out')}>−</button>
+			<button class="zoom-btn" onclick={resetZoom} title={$t('common.map.reset')}>⟲</button>
 		</div>
 		<div class="map-legend">
 			<div class="legend-item">
 				<span class="legend-dot high"></span>
-				{$t('map.high')}
+				{$t('common.map.high')}
 			</div>
 			<div class="legend-item">
 				<span class="legend-dot elevated"></span>
-				{$t('map.elevated')}
+				{$t('common.map.elevated')}
 			</div>
 			<div class="legend-item">
 				<span class="legend-dot low"></span>
-				{$t('map.low')}
+				{$t('common.map.low')}
 			</div>
 		</div>
 	</div>

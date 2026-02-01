@@ -49,12 +49,12 @@
 
 <Panel id="correlation" {loading} {error}>
 	{#if news.length === 0 && !loading && !error}
-		<div class="empty-state">{$t('correlation.no_data')}</div>
+		<div class="empty-state">{$t('common.correlation.no_data')}</div>
 	{:else if analysis}
 		<div class="correlation-content">
 			{#if analysis.emergingPatterns.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('correlation.emerging')}</div>
+					<div class="section-title">{$t('common.correlation.emerging')}</div>
 					{#each analysis.emergingPatterns.slice(0, 3) as pattern}
 						<div class="pattern-item">
 							<div class="pattern-header">
@@ -66,7 +66,7 @@
 							</div>
 							<div class="pattern-sources">
 								{pattern.sources.slice(0, 3).join(' · ')}
-								{$t('correlation.items_count', {
+								{$t('common.correlation.items_count', {
 									values: { count: pattern.count }
 								})}
 							</div>
@@ -77,7 +77,7 @@
 
 			{#if analysis.momentumSignals.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('correlation.momentum')}</div>
+					<div class="section-title">{$t('common.correlation.momentum')}</div>
 					{#each analysis.momentumSignals.slice(0, 3) as signal}
 						<div class="signal-item {getMomentumClass(signal.momentum)}">
 							<span class="signal-topic">{signal.name}</span>
@@ -96,7 +96,7 @@
 
 			{#if analysis.crossSourceCorrelations.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('correlation.cross_source')}</div>
+					<div class="section-title">{$t('common.correlation.cross_source')}</div>
 					{#each analysis.crossSourceCorrelations.slice(0, 3) as corr}
 						<div class="correlation-item">
 							<div class="correlation-sources">
@@ -104,7 +104,7 @@
 							</div>
 							<div class="correlation-topic">
 								{corr.name}
-								{$t('correlation.sources_count', {
+								{$t('common.correlation.sources_count', {
 									values: { count: corr.sourceCount }
 								})}
 							</div>
@@ -115,12 +115,12 @@
 
 			{#if analysis.predictiveSignals.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('correlation.predictive')}</div>
+					<div class="section-title">{$t('common.correlation.predictive')}</div>
 					{#each analysis.predictiveSignals.slice(0, 2) as signal}
 						<div class="predictive-item">
 							<div class="predictive-pattern">{signal.prediction}</div>
 							<div class="predictive-confidence">
-								{$t('correlation.confidence', {
+								{$t('common.correlation.confidence', {
 									values: { level: Math.round(signal.confidence * 100) }
 								})}
 							</div>
@@ -130,11 +130,11 @@
 			{/if}
 
 			{#if analysis.emergingPatterns.length === 0 && analysis.momentumSignals.length === 0}
-				<div class="empty-state">{$t('correlation.none_detected')}</div>
+				<div class="empty-state">{$t('common.correlation.none_detected')}</div>
 			{/if}
 		</div>
 	{:else}
-		<div class="empty-state">{$t('correlation.none_detected')}</div>
+		<div class="empty-state">{$t('common.correlation.none_detected')}</div>
 	{/if}
 </Panel>
 

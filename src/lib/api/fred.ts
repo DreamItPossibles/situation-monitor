@@ -260,6 +260,23 @@ function hashString(str: string): string {
 }
 
 /**
+ * Parse RSS date string into a timestamp
+ */
+function parseRssDate(dateStr: string): number {
+	if (!dateStr) return Date.now();
+	const date = new Date(dateStr);
+	if (!isNaN(date.getTime())) return date.getTime();
+
+	// Try to handle some common RSS date issues (e.g., non-standard timezones)
+	// Remove common 3-letter timezones at the end that might confuse some parsers
+	const cleaned = dateStr.replace(/\s[A-Z]{3,4}$/, '');
+	const dateCleaned = new Date(cleaned);
+	if (!isNaN(dateCleaned.getTime())) return dateCleaned.getTime();
+
+	return Date.now();
+}
+
+/**
  * Parse RSS XML and extract items
  */
 function parseRssXml(xml: string, type: FedNewsType, typeLabel: string): FedNewsItem[] {
@@ -292,13 +309,15 @@ function parseRssXml(xml: string, type: FedNewsType, typeLabel: string): FedNews
 		const isPowellRelated = type === 'powell' || /powell|chair(?:man)?/.test(fullText);
 		const hasVideo = /video|webcast|watch|broadcast|live/.test(fullText);
 
+		const timestamp = parseRssDate(pubDate);
+
 		items.push({
 			id: `fed-${type}-${hashString(link)}`,
 			title,
 			link: link.startsWith('http') ? link : `${FED_BASE_URL}${link}`,
 			description,
-			pubDate,
-			timestamp: pubDate ? new Date(pubDate).getTime() : Date.now(),
+			pubDate: new Date(timestamp).toISOString(),
+			timestamp,
 			type,
 			typeLabel,
 			isPowellRelated,

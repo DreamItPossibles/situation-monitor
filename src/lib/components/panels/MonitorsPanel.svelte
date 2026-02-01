@@ -39,17 +39,17 @@
 	<div class="monitors-content">
 		{#if monitors.length === 0 && !loading && !error}
 			<div class="empty-state">
-				<p>{$t('monitors.none')}</p>
+				<p>{$t('common.monitors.none')}</p>
 				{#if onCreateMonitor}
 					<button class="create-btn" onclick={onCreateMonitor}>
-						+ {$t('monitors.create')}
+						+ {$t('common.monitors.create')}
 					</button>
 				{/if}
 			</div>
 		{:else}
 			<div class="monitors-header">
 				<span class="active-count"
-					>{$t('monitors.active_count', { values: { count: activeMonitors.length } })}</span
+					>{$t('common.monitors.active_count', { values: { count: activeMonitors.length } })}</span
 				>
 				{#if onCreateMonitor}
 					<button class="add-btn" onclick={onCreateMonitor}>+</button>
@@ -75,7 +75,7 @@
 										class="action-btn"
 										class:active={monitor.enabled}
 										onclick={() => onToggleMonitor?.(monitor.id)}
-										title={monitor.enabled ? $t('monitors.disable') : $t('monitors.enable')}
+										title={monitor.enabled ? $t('common.monitors.disable') : $t('common.monitors.enable')}
 									>
 										{monitor.enabled ? '●' : '○'}
 									</button>
@@ -84,7 +84,7 @@
 									<button
 										class="action-btn"
 										onclick={() => onEditMonitor?.(monitor)}
-										title={$t('monitors.edit')}
+										title={$t('common.monitors.edit')}
 									>
 										✎
 									</button>
@@ -93,7 +93,7 @@
 									<button
 										class="action-btn delete"
 										onclick={() => onDeleteMonitor?.(monitor.id)}
-										title={$t('monitors.delete')}
+										title={$t('common.monitors.delete')}
 									>
 										×
 									</button>

@@ -76,7 +76,7 @@
 		</div>
 	{:else if !hasApiKey && !loading}
 		<div class="no-api-key">
-			<span class="no-api-key-text">{$t('fed.api_key_required')}</span>
+			<span class="no-api-key-text">{$t('common.fed.api_key_required')}</span>
 		</div>
 	{/if}
 
@@ -84,14 +84,14 @@
 	{#if videoItems.length > 0}
 		<div class="video-section">
 			<div class="section-header">
-				<span class="section-title">{$t('fed.speeches_video')}</span>
+				<span class="section-title">{$t('common.fed.speeches_video')}</span>
 				<a
 					href="https://www.federalreserve.gov/live-broadcast.htm"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="live-link"
 				>
-					{$t('fed.live_broadcast')}
+					{$t('common.fed.live_broadcast')}
 				</a>
 			</div>
 			<div class="video-list">
@@ -104,7 +104,9 @@
 								{#if item.isPowellRelated}
 									<Badge text="POWELL" variant="warning" />
 								{/if}
-								<span>{getRelativeTime(item.pubDate, $locale ?? 'en-US')}</span>
+								{#if item.timestamp && !isNaN(item.timestamp)}
+									<span>{getRelativeTime(item.timestamp, $locale ?? 'en-US')}</span>
+								{/if}
 							</div>
 						</div>
 					</a>
@@ -116,7 +118,7 @@
 	<!-- News Feed -->
 	<div class="news-section">
 		{#if newsState.items.length === 0 && !loading && !error}
-			<div class="empty-state">{$t('fed.no_news')}</div>
+			<div class="empty-state">{$t('common.fed.no_news')}</div>
 		{:else}
 			<div class="fed-news-list">
 				{#each newsState.items as item (item.id)}
@@ -131,9 +133,9 @@
 									<Badge text="VIDEO" variant="info" />
 								{/if}
 							</div>
-							{#if item.pubDate}
+							{#if item.timestamp && !isNaN(item.timestamp)}
 								<span class="fed-news-time"
-									>{getRelativeTime(item.pubDate, $locale ?? 'en-US')}</span
+									>{getRelativeTime(item.timestamp, $locale ?? 'en-US')}</span
 								>
 							{/if}
 						</div>

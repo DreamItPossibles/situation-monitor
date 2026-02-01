@@ -23,7 +23,7 @@
 
 <Panel id="layoffs" {count} {loading} {error}>
 	{#if layoffs.length === 0 && !loading && !error}
-		<div class="empty-state">{$t('layoffs.no_data')}</div>
+		<div class="empty-state">{$t('common.layoffs.no_data')}</div>
 	{:else}
 		<div class="layoffs-list">
 			{#each layoffs as layoff, i (layoff.company + i)}
@@ -31,7 +31,7 @@
 					<div class="layoff-company">{layoff.company}</div>
 					{#if layoff.count}
 						<div class="layoff-count">
-							{$t('layoffs.jobs', {
+							{$t('common.layoffs.jobs', {
 								values: {
 									count: (typeof layoff.count === 'string'
 										? parseInt(layoff.count)

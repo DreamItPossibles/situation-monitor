@@ -43,12 +43,12 @@
 			.filter((k) => k.length > 0);
 
 		if (!trimmedName) {
-			error = $t('monitors.error_name');
+			error = $t('common.monitors.error_name');
 			return;
 		}
 
 		if (keywordList.length === 0) {
-			error = $t('monitors.error_keywords');
+			error = $t('common.monitors.error_keywords');
 			return;
 		}
 
@@ -68,7 +68,7 @@
 			});
 
 			if (!result) {
-				error = $t('monitors.error_max');
+				error = $t('common.monitors.error_max');
 				return;
 			}
 		}
@@ -84,14 +84,14 @@
 	}
 </script>
 
-<Modal {open} title={editMonitor ? $t('monitors.edit') : $t('monitors.create')} {onClose}>
+<Modal {open} title={editMonitor ? $t('common.monitors.edit') : $t('common.monitors.create')} {onClose}>
 	<form class="monitor-form" onsubmit={handleSubmit}>
 		{#if error}
 			<div class="form-error">{error}</div>
 		{/if}
 
 		<div class="form-group">
-			<label for="monitor-name">{$t('monitors.name')}</label>
+			<label for="monitor-name">{$t('common.monitors.name')}</label>
 			<input
 				id="monitor-name"
 				type="text"
@@ -102,34 +102,34 @@
 		</div>
 
 		<div class="form-group">
-			<label for="monitor-keywords">{$t('monitors.keywords')}</label>
+			<label for="monitor-keywords">{$t('common.monitors.keywords')}</label>
 			<input
 				id="monitor-keywords"
 				type="text"
 				bind:value={keywords}
 				placeholder="e.g., ukraine, zelensky, kyiv"
 			/>
-			<p class="form-hint">{$t('monitors.keywords_hint')}</p>
+			<p class="form-hint">{$t('common.monitors.keywords_hint')}</p>
 		</div>
 
 		<div class="form-group">
 			<label class="checkbox-label">
 				<input type="checkbox" bind:checked={enabled} />
-				<span>{$t('monitors.enabled')}</span>
+				<span>{$t('common.monitors.enabled')}</span>
 			</label>
 		</div>
 
 		<div class="form-actions">
 			{#if editMonitor}
 				<button type="button" class="delete-btn" onclick={handleDelete}>
-					{$t('monitors.delete')}
+					{$t('common.monitors.delete')}
 				</button>
 			{/if}
 			<button type="button" class="cancel-btn" onclick={onClose}>
 				{$t('common.cancel')}
 			</button>
 			<button type="submit" class="submit-btn">
-				{editMonitor ? $t('monitors.save') : $t('monitors.create')}
+				{editMonitor ? $t('common.monitors.save') : $t('common.monitors.create')}
 			</button>
 		</div>
 	</form>

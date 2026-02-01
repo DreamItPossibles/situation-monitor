@@ -15,10 +15,10 @@
 		<div class="empty-state">{$t('common.no_data')}</div>
 	{:else}
 		<div class="main-char-display">
-			<div class="main-char-label">{$t('mainchar.label')}</div>
+			<div class="main-char-label">{$t('common.mainchar.label')}</div>
 			<div class="main-char-name">{topChar.name}</div>
 			<div class="main-char-count">
-				{$t('mainchar.mentions', { values: { count: topChar.count } })}
+				{$t('common.mainchar.mentions', { values: { count: topChar.count } })}
 			</div>
 
 			{#if rankings.length > 1}

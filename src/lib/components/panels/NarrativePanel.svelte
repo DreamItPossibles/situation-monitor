@@ -45,12 +45,12 @@
 
 <Panel id="narrative" {loading} {error}>
 	{#if news.length === 0 && !loading && !error}
-		<div class="empty-state">{$t('narratives.no_data')}</div>
+		<div class="empty-state">{$t('common.narratives.no_data')}</div>
 	{:else if analysis}
 		<div class="narrative-content">
 			{#if analysis.emergingFringe.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('narratives.emerging')}</div>
+					<div class="section-title">{$t('common.narratives.emerging')}</div>
 					{#each analysis.emergingFringe.slice(0, 4) as narrative}
 						<div class="narrative-item">
 							<div class="narrative-header">
@@ -77,23 +77,23 @@
 
 			{#if analysis.fringeToMainstream.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('narratives.crossover')}</div>
+					<div class="section-title">{$t('common.narratives.crossover')}</div>
 					{#each analysis.fringeToMainstream.slice(0, 3) as crossover}
 						<div class="crossover-item">
 							<div class="crossover-narrative">{crossover.name}</div>
 							<div class="crossover-path">
 								<span class="from"
-									>{$t('narratives.fringe', { values: { count: crossover.fringeCount } })}</span
+									>{$t('common.narratives.fringe', { values: { count: crossover.fringeCount } })}</span
 								>
 								<span class="arrow">→</span>
 								<span class="to"
-									>{$t('narratives.mainstream', {
+									>{$t('common.narratives.mainstream', {
 										values: { count: crossover.mainstreamCount }
 									})}</span
 								>
 							</div>
 							<div class="crossover-level">
-								{$t('narratives.crossover_level', {
+								{$t('common.narratives.crossover_level', {
 									values: { level: Math.round(crossover.crossoverLevel * 100) }
 								})}
 							</div>
@@ -104,7 +104,7 @@
 
 			{#if analysis.narrativeWatch.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('narratives.watch')}</div>
+					<div class="section-title">{$t('common.narratives.watch')}</div>
 					<div class="themes-grid">
 						{#each analysis.narrativeWatch.slice(0, 6) as narrative}
 							<div class="theme-tag">
@@ -118,7 +118,7 @@
 
 			{#if analysis.disinfoSignals.length > 0}
 				<div class="section">
-					<div class="section-title">{$t('narratives.disinfo')}</div>
+					<div class="section-title">{$t('common.narratives.disinfo')}</div>
 					{#each analysis.disinfoSignals.slice(0, 3) as signal}
 						<div class="disinfo-item">
 							<div class="disinfo-header">
@@ -137,11 +137,11 @@
 			{/if}
 
 			{#if analysis.emergingFringe.length === 0 && analysis.fringeToMainstream.length === 0}
-				<div class="empty-state">{$t('narratives.none_detected')}</div>
+				<div class="empty-state">{$t('common.narratives.none_detected')}</div>
 			{/if}
 		</div>
 	{:else}
-		<div class="empty-state">{$t('narratives.none_detected')}</div>
+		<div class="empty-state">{$t('common.narratives.none_detected')}</div>
 	{/if}
 </Panel>
 
